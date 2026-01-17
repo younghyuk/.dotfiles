@@ -1,3 +1,3 @@
-print("Started init.lua")
-require("config.vim-options")
-require("config.lazy")
+require("ethan.core")
+require("ethan.lazy")
+require("ethan.lsp")

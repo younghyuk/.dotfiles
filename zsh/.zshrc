@@ -58,5 +58,8 @@ function y() {
   rm -f -- "$tmp"
 }
 
+# nvim
+export EDITOR=nvim # set EDITOR environment variable as nvim to open file with nvim
+
 # lazygit
 alias lg=lazygit

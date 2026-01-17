@@ -15,7 +15,7 @@ return {
             visible = true,
             show_hidden_count = true,
             hide_dotfiles = false,
-            hide_gitignored = true,
+            hide_gitignored = false,
             hide_by_name = {
               -- add extension names you want to explicitly exclude
               -- '.git',
