@@ -24,6 +24,8 @@ _darcs
 
 # SSH
 known_hosts
-known_hosts.old
+known_hosts\.old
 authorized_keys
 \.pem
+\.key
+id_.*
