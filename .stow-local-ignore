@@ -21,3 +21,9 @@ _darcs
 ^/README.*
 ^/LICENSE.*
 ^/COPYING
+
+# SSH
+known_hosts
+known_hosts.old
+authorized_keys
+\.pem
