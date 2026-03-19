@@ -53,3 +53,4 @@ theme = Dracula
 font-family = "MesloLGS Nerd Font Mono"
 shell-integration = zsh
 shell-integration-features = ssh-terminfo,ssh-env
+term = xterm-256color
