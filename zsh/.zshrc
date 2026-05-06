@@ -18,7 +18,7 @@ source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 # 1password
 export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
 export OP_BIOMETRIC_UNLOCK_ENABLED=true
-source ~/.config/op/plugins.sh
+[[ -f ~/.config/op/plugins.sh ]] && source ~/.config/op/plugins.sh
 
 # zoxide
 eval "$(zoxide init zsh)"
