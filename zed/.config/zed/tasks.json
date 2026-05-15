@@ -3,4 +3,12 @@
     "label": "start_lazygit",
     "command": "lazygit -p $ZED_WORKTREE_ROOT",
   },
+  {
+    "label": "worktree: install dependencies",
+    "command": "zsh",
+    "args": ["$HOME/.config/zed/install-deps.sh"],
+    "hooks": ["create_worktree"],
+    "reveal": "always",
+    "hide": "on_success",
+  },
 ]
