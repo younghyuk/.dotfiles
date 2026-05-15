@@ -21,6 +21,7 @@
       "Bash(git merge*)",
       "Bash(git rebase*)",
       "Bash(git tag*)",
+      "Bash(git push*)",
 
       "Bash(npm *)",
       "Bash(pnpm *)",
@@ -86,7 +87,6 @@
     ],
     "ask": [
       "Bash(rm *)",
-      "Bash(git push*)",
       "Bash(git reset*)",
       "Bash(git clean*)",
       "Bash(kill *)",
