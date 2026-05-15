@@ -32,7 +32,6 @@
       "Bash(tsx *)",
       "Bash(ts-node *)",
 
-      "Bash(brew *)",
       "Bash(curl *)",
       "Bash(wget *)",
       "Bash(ssh *)",
@@ -91,6 +90,7 @@
       "Bash(git clean*)",
       "Bash(kill *)",
       "Bash(pkill *)",
+      "Bash(brew *)",
       "Bash(docker rm*)",
       "Bash(docker rmi*)",
       "Bash(docker system prune*)",
@@ -110,10 +110,7 @@
       "Bash(rm -fr *)",
       "Bash(chmod 777 *)",
       "Bash(chmod -R 777 *)",
-      "Read(.env)",
-      "Read(.env.*)",
-      "Read(.env.local)",
-      "Read(.env.*.local)"
+      "Read(.env*)"
     ]
   }
 }
