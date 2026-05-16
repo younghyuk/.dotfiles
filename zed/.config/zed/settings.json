@@ -1,4 +1,11 @@
 {
+  "context_servers": {
+    "svelte-mcp": {
+      "enabled": false,
+      "remote": false,
+      "settings": {}
+    }
+  },
   "proxy": "",
   "base_keymap": "VSCode",
   "agent_servers": {
