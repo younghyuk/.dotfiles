@@ -13,5 +13,18 @@ claude mcp add mysql_seoul4pm_local -s user \
   -e MYSQL_DB=seoul4pm \
   -- npx -y @benborla29/mcp-server-mysql
 
+claude mcp add github -s user \
+  -e GITHUB_PERSONAL_ACCESS_TOKEN="op://Personal/GitHub PAT - Claude/credential" \
+  -- op run -- npx -y @modelcontextprotocol/server-github
+
+claude mcp add context7 -s user \
+  -- npx -y @upstash/context7-mcp
+
+claude mcp add playwright -s user \
+  -- npx @playwright/mcp@latest
+
+claude mcp add --transport http linear -s user \
+  https://mcp.linear.app/sse
+
 echo "완료. 등록된 MCP 서버:"
 claude mcp list
