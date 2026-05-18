@@ -49,6 +49,7 @@ export TURBO_TOKEN=399ea42b45ac8969ab73165cb888e056abdef4df2e861ddc7a281bd103cf4
 # claude
 export PATH="$HOME/.local/bin:$PATH"
 alias cc='claude'
+alias ccd='claude --dangerously-skip-permissions'
 
 # bun completions
 [ -s "/Users/ethan/.bun/_bun" ] && source "/Users/ethan/.bun/_bun"
