@@ -1,25 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "theme": "dark",
-  "model": "opus",
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cmux notify --title \"Claude Code\" --body \"작업이 완료됐어요\""
-          }
-        ]
-      }
-    ]
-  },
   "permissions": {
     "allow": [
       "WebFetch(*)",
       "WebSearch(*)",
-
       "Bash(git diff*)",
       "Bash(git log*)",
       "Bash(git status*)",
@@ -36,7 +20,6 @@
       "Bash(git rebase*)",
       "Bash(git tag*)",
       "Bash(git push*)",
-
       "Bash(npm *)",
       "Bash(pnpm *)",
       "Bash(yarn *)",
@@ -45,7 +28,6 @@
       "Bash(node *)",
       "Bash(tsx *)",
       "Bash(ts-node *)",
-
       "Bash(curl *)",
       "Bash(wget *)",
       "Bash(ssh *)",
@@ -53,7 +35,6 @@
       "Bash(dig *)",
       "Bash(nslookup *)",
       "Bash(jq *)",
-
       "Bash(docker build*)",
       "Bash(docker run*)",
       "Bash(docker ps*)",
@@ -68,7 +49,6 @@
       "Bash(docker-compose down*)",
       "Bash(docker-compose logs*)",
       "Bash(docker-compose build*)",
-
       "Bash(ls *)",
       "Bash(find *)",
       "Bash(grep *)",
@@ -97,21 +77,7 @@
       "Bash(lsof *)",
       "Bash(pbcopy *)",
       "Bash(pbpaste)",
-
       "Bash(cmux *)"
-    ],
-    "ask": [
-      "Bash(rm *)",
-      "Bash(git reset*)",
-      "Bash(git clean*)",
-      "Bash(kill *)",
-      "Bash(pkill *)",
-      "Bash(brew *)",
-      "Bash(docker rm*)",
-      "Bash(docker rmi*)",
-      "Bash(docker system prune*)",
-      "Bash(docker volume rm*)",
-      "Bash(docker-compose rm*)"
     ],
     "deny": [
       "Bash(git push --force*)",
@@ -127,6 +93,36 @@
       "Bash(chmod 777 *)",
       "Bash(chmod -R 777 *)",
       "Read(.env*)"
+    ],
+    "ask": [
+      "Bash(rm *)",
+      "Bash(git reset*)",
+      "Bash(git clean*)",
+      "Bash(kill *)",
+      "Bash(pkill *)",
+      "Bash(brew *)",
+      "Bash(docker rm*)",
+      "Bash(docker rmi*)",
+      "Bash(docker system prune*)",
+      "Bash(docker volume rm*)",
+      "Bash(docker-compose rm*)"
     ]
-  }
+  },
+  "model": "opus",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmux notify --title \"Claude Code\" --body \"작업이 완료됐어요\""
+          }
+        ]
+      }
+    ]
+  },
+  "theme": "dark",
+  "autoCompactEnabled": true,
+  "skipDangerousModePermissionPrompt": true
 }
