@@ -43,12 +43,12 @@ esac
 # mysql-client
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 
-# turborepo remote cache
-export TURBO_TOKEN=399ea42b45ac8969ab73165cb888e056abdef4df2e861ddc7a281bd103cf47fd
+# 시크릿 (~/.zsh_secrets, git 관리 안 됨)
+[[ -f ~/.zsh_secrets ]] && source ~/.zsh_secrets
 
 # claude
 export PATH="$HOME/.local/bin:$PATH"
-alias cc='claude'
+alias cc='claude --enable-auto-mode'
 alias ccd='claude --dangerously-skip-permissions'
 
 # bun completions
