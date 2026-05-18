@@ -95,7 +95,9 @@
       "Bash(ps *)",
       "Bash(lsof *)",
       "Bash(pbcopy *)",
-      "Bash(pbpaste)"
+      "Bash(pbpaste)",
+
+      "Bash(cmux *)"
     ],
     "ask": [
       "Bash(rm *)",
