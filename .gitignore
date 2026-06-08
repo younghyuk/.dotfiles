@@ -1,3 +1,6 @@
 ssh/.ssh/*
 !ssh/.ssh/config
 .playwright-mcp/
+
+# cmux auto-backup files
+cmux/.config/cmux/*.bak
