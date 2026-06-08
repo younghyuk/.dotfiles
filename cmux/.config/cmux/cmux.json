@@ -6,6 +6,20 @@
     "appearance": "dark",
     "appIcon": "light",
     "preferredEditor": "zed",
-    "workspaceInheritWorkingDirectory": true
+    "workspaceInheritWorkingDirectory": true,
+    "openMarkdownInCmuxViewer": true
+  },
+  "browser": {
+    "urlsToAlwaysOpenExternally": [
+      "*github.com*"
+    ],
+    "openTerminalLinksInCmuxBrowser": false,
+    "interceptTerminalOpenCommandInCmuxBrowser": false,
+    "hostsToOpenInEmbeddedBrowser": [
+      "localhost",
+      "*.localhost",
+      "127.0.0.1",
+      "::1"
+    ]
   }
 }
