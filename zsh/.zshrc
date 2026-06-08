@@ -35,8 +35,8 @@ eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
 # pnpm
 export PNPM_HOME="/Users/ethan/Library/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
 
@@ -63,3 +63,6 @@ alias lzg='lazygit'
 
 # lazydocker
 alias lzd='lazydocker'
+
+# sentry
+fpath=("/Users/ethan/.local/share/zsh/site-functions" $fpath)
