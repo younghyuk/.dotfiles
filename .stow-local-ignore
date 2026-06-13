@@ -22,6 +22,16 @@ _darcs
 ^/LICENSE.*
 ^/COPYING
 
+# Package-local helper scripts
+^/bootstrap\.sh$
+^/sync\.sh$
+^/verify\.sh$
+^/setup-mcp\.sh$
+^bootstrap\.sh$
+^sync\.sh$
+^verify\.sh$
+^setup-mcp\.sh$
+
 # SSH
 known_hosts
 known_hosts\.old
