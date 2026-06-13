@@ -3,10 +3,62 @@
 - 큰 변경 전에 접근법 먼저 설명하고 확인받기
 
 # 코드 스타일
-- 주석은 이유가 non-obvious할 때만 (what이 아닌 why)
+- 주석은 기본 금지 — 꼭 필요할 때만. 유일하게 허용되는 주석은 코드로 표현 불가능한
+  non-obvious why(시점 제약, 외부 시스템 사정, 회귀 방지 근거) 한 줄.
+  - 금지: 단계 라벨("── 준비 ──"), 좋은 이름이 이미 말하는 내용의 반복, 설계 의도·결정 배경
+    서술(커밋 메시지/PR로), 리뷰어를 향한 정당화("~라서 이렇게 함")
+  - 자가 검증: 그 주석을 지웠을 때 코드를 잘못 고칠 사람이 있는가? 없으면 지운다
 - 에러 핸들링은 시스템 경계(사용자 입력, 외부 API)에서만
 - 실제로 필요할 때만 추상화
 - 현재 요청 범위 밖의 리팩터링, 기능 추가 금지
+- (JS/TS) 최신 ECMAScript의 명시적 문법 우선 — 암묵 지식을 요구하는 구식 기법 지양:
+  - `bind`/`call`/`apply` 대신 화살표 래퍼 `(x) => obj.fn(x)`
+  - `var` 대신 `const`(기본)/`let`, `arguments` 대신 rest 파라미터
+  - `.then()` 체인 대신 `async/await`, `Object.assign({}, ...)` 대신 spread
+  - "지금 필요 없는 방어"로 구식 기법 넣지 않기 (예: this 안 쓰는 메서드에 bind)
+  - 예외는 서드파티 API가 강제할 때뿐, 그 경우 사유 주석
+
+# 네이밍
+- 함수는 동사구, 변수는 명사구 — 형용사·전치사구 단독 변수 금지:
+  함수 `excludeProductsNotInSheet()` ↔ 결과 `excludedProducts` (o) / `excluded` — 뭐가? (x)
+  Map은 `값ByKey` — 1:1 조회는 단수, 그룹핑은 복수: `productByBarcode` Map<barcode,product> (o) /
+  `productsByBrand` Map<brand,product[]> (o) / `byBarcode` — 바코드로 뭐가? (x) /
+  `productMap` — 타입은 말하는데 키를 안 말함 (x)
+- 이름만 읽고 동작이 보이게 — 변경 여부·방향·조건을 이름에 담는다:
+  `raisePriceIfBelow(x)` (o) / `defendMargin(x)` — 의도만 있고 메커니즘이 숨음 (x)
+- 기술 동사(index/resolve/handle/process/manage) 대신 도메인 동사:
+  `findExistingProductsByBarcode()` (o) / `indexBrandCatalog()` (x)
+- 동사가 효과의 등급을 말하게: `find/get` 조회, `build/to` 객체 조립(저장 안 함),
+  `save/persist/create` 저장. 조립 이름의 함수가 저장까지 하면 그 이름은 거짓말
+- 같은 개념엔 같은 단어, 다른 개념엔 다른 단어 — fetch/get/retrieve 혼용 금지,
+  정의가 다른 두 개념(예: 분모가 다른 두 '마진율')을 한 이름으로 부르지 않는다.
+  도메인 어휘는 API 응답·화면 문구와 정렬 (created/updated/excluded ↔ 헬퍼·변수도 그 어휘로)
+- boolean은 긍정형 질문: `isPriceBelow`, `hasStock`, `canCancel`. 부정형·이중부정 금지
+- 타입이 아는 정보는 이름에서 빼고(`ageNum`, `userArr` ✗ — 헝가리안 금지),
+  타입이 모르는 단위·스케일·통화만 붙인다(`durationMs`, `marginRateBp`, `priceKrw` ✓)
+- 언어가 이미 표현하는 관계를 장식하지 않는다: 인터페이스 `I` 접두사, private `_`,
+  `opt_` 류 금지
+- 약어는 업계 표준만(id, url, msrp), camelCase에선 단어처럼: `loadHttpUrl` (o) /
+  `loadHTTPURL` (x). 단어 중간 글자를 빼는 자체 약어 금지
+- 무의미 단어(data/info/result/item/thing/manager/util/helper/temp) 금지 —
+  이름이 비어 있으면 책임 분리가 안 됐다는 신호
+- 이름의 구체성은 스코프 길이에 비례 — 3줄 루프의 `p`는 되지만, 선언부가 화면 밖으로
+  벗어나는 변수는 이름 혼자 설 수 있어야 한다. 그룹 반환은 받자마자 구조분해로 평탄화
+- 자가 검증: 본문을 가리고 이름+시그니처만으로 동작을 서술할 수 있어야 한다.
+  설명에 "단,", "사실은"이 붙으면 이름이 틀린 것
+
+# 외부 문서(엑셀 등) 처리
+- 단계 고정: 문서 → rows(타입드 DTO + 출처 행 번호) → 도메인 객체 → 도메인 처리.
+  각 단계는 이전 단계의 출력만 본다 — 도메인 코드에 셀 좌표·헤더 문자열·파서 라이브러리 타입 금지
+- Parse, don't validate: 경계에서 스키마(zod)로 한 번 파싱해 타입으로 증명, 이후 재검증 금지.
+  스키마가 런타임 검증과 정적 타입의 단일 출처 (z.infer)
+- 출처 보존: 행 번호를 DTO에 붙여 다니고, 오류는 문서의 좌표계(행 번호·문서 용어)로 보고
+- 오류는 행 단위로 모아서 한 번에 보고 (fail-fast 금지 — 사용자가 문서를 한 번에 고치게)
+- 문서 어휘 ↔ 도메인 어휘 번역은 헤더맵 한 곳에. 문서의 의미가 도메인과 다르면
+  (예: PRICE 컬럼 = 공급 원가) 변환 지점에 주석으로 기록
+- 정규화 결정(중복 행 last-wins, 콤마 제거, 빈 셀 의미)은 rows 단계에서 끝내고 명시
+- row → 도메인 매핑은 행 단위 순수 함수로. 현재 상태와의 대조(생성/갱신/제외 분류)는
+  별도 단계 — 문서만으로 결정할 수 없는 것을 매핑에 섞지 않는다
 
 # 시크릿 관리
 - 개인 시크릿: 1Password (`op://` 참조, `op run --` 래퍼)
