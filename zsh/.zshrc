@@ -33,7 +33,7 @@ alias lt="eza -a --tree --icons"
 eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
 
 # pnpm
-export PNPM_HOME="/Users/ethan/Library/pnpm"
+export PNPM_HOME="$HOME/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME/bin:"*) ;;
   *) export PATH="$PNPM_HOME/bin:$PNPM_HOME:$PATH" ;;
@@ -57,7 +57,7 @@ alias cxd='codex -a never -s workspace-write -c "sandbox_workspace_write.network
 alias cxx='codex --dangerously-bypass-approvals-and-sandbox'
 
 # bun completions
-[ -s "/Users/ethan/.bun/_bun" ] && source "/Users/ethan/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
@@ -70,4 +70,4 @@ alias lzg='lazygit'
 alias lzd='lazydocker'
 
 # sentry
-fpath=("/Users/ethan/.local/share/zsh/site-functions" $fpath)
+fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
