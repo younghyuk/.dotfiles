@@ -271,5 +271,6 @@
   },
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
-  "autoCompactEnabled": true
+  "autoCompactEnabled": true,
+  "tui": "fullscreen"
 }
