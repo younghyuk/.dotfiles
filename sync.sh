@@ -63,6 +63,26 @@ sync_stow() {
   fi
 }
 
+sync_homebrew() {
+  section 'Homebrew'
+
+  if ! has_command brew; then
+    fail 'brew missing: install Homebrew first'
+    return
+  fi
+
+  if HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle check --file="$DOTFILES_DIR/Brewfile"; then
+    pass 'Brewfile dependencies are satisfied'
+    return
+  fi
+
+  if HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle install --file="$DOTFILES_DIR/Brewfile" --no-upgrade; then
+    pass 'Brewfile dependencies installed'
+  else
+    fail 'brew bundle install failed'
+  fi
+}
+
 sync_slack_mcp_server() {
   section 'Slack MCP'
 
@@ -238,6 +258,7 @@ run_smoke_checks() {
 printf 'dotfiles: %s\n' "$DOTFILES_DIR"
 
 sync_git
+sync_homebrew
 sync_stow
 sync_slack_mcp_server
 sync_lazycodex

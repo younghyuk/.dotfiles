@@ -14,11 +14,23 @@ cd ~/.dotfiles
 `sync.sh`가 하는 일:
 
 - worktree가 깨끗하면 `git pull --ff-only`
+- `Brewfile` 기준 Homebrew formula/cask/tap 동기화
 - `stow --restow codex zsh agents claude`
 - 가능한 범위에서 누락된 런타임 도구 설치
 - Codex, LazyCodex, Claude MCP, zsh, agents, 수동 secret smoke check
 
 개인 secret은 의도적으로 동기화하지 않는다. 각 머신의 `~/.zsh_secrets`에 직접 둔다.
+
+## Homebrew
+
+Homebrew 설치 목록은 루트 `Brewfile`로 관리한다.
+
+```bash
+brew bundle dump --file=Brewfile --force --no-vscode --no-go --no-npm --no-describe
+```
+
+`sync.sh`는 자동 upgrade를 피하기 위해 `HOMEBREW_BUNDLE_NO_UPGRADE=1`과 `--no-upgrade`로 실행한다.
+설치된 패키지를 Brewfile에 정확히 맞춰 지우는 `brew bundle cleanup --force`는 자동 실행하지 않는다.
 
 ## Stow 패키지
 
