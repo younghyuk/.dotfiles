@@ -51,6 +51,11 @@ export PATH="$HOME/.local/bin:$PATH"
 alias cc='claude --enable-auto-mode'
 alias ccd='claude --dangerously-skip-permissions'
 
+# codex
+alias cx='codex'
+alias cxd='codex -a never -s workspace-write -c "sandbox_workspace_write.network_access=true"'
+alias cxx='codex --dangerously-bypass-approvals-and-sandbox'
+
 # bun completions
 [ -s "/Users/ethan/.bun/_bun" ] && source "/Users/ethan/.bun/_bun"
 
