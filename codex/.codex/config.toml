@@ -13,13 +13,13 @@ network_access = "enabled"
 network_access = false
 
 [marketplaces.claude-plugins-official]
-last_updated = "2026-06-13T00:15:39Z"
+last_updated = "2026-06-13T06:49:38Z"
 last_revision = "ac16ffafcd700e306d8a0fe96e9633ac8a3154e9"
 source_type = "git"
 source = "https://github.com/anthropics/claude-plugins-official.git"
 
 [marketplaces.karpathy-skills]
-last_updated = "2026-06-08T07:41:15Z"
+last_updated = "2026-06-13T06:49:40Z"
 last_revision = "2c606141936f1eeef17fa3043a72095b4765b9c2"
 source_type = "git"
 source = "https://github.com/forrestchang/andrej-karpathy-skills.git"

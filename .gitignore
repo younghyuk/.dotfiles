@@ -19,6 +19,10 @@ codex/.codex/tmp/
 codex/.codex/models_cache.json
 codex/.codex/installation_id
 codex/.codex/chrome-native-hosts-v2.json
+codex/.codex/.personality_migration
+codex/.codex/version.json
+codex/.codex/plugins/
+codex/.codex/skills/.system/
 
 # Locally copied MCP/env secrets
 config/codex/*.env
