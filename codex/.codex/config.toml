@@ -1,0 +1,275 @@
+notify = [
+    "/Users/ethan/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient",
+    "turn-ended",
+]
+
+approval_policy = "never"
+approvals_reviewer = "user"
+sandbox_mode = "danger-full-access"
+default_permissions = "seoul4pm-local"
+web_search = "cached"
+model = "gpt-5.5"
+model_context_window = 400000
+model_reasoning_effort = "xhigh"
+plan_mode_reasoning_effort = "xhigh"
+network_access = "enabled"
+
+[sandbox_workspace_write]
+network_access = false
+
+[marketplaces.openai-bundled]
+last_updated = "2026-06-08T07:18:12Z"
+source_type = "local"
+source = "/Users/ethan/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+last_updated = "2026-06-08T07:19:07Z"
+source_type = "local"
+source = "/Users/ethan/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+[marketplaces.claude-plugins-official]
+last_updated = "2026-06-13T00:15:39Z"
+last_revision = "ac16ffafcd700e306d8a0fe96e9633ac8a3154e9"
+source_type = "git"
+source = "https://github.com/anthropics/claude-plugins-official.git"
+
+[marketplaces.karpathy-skills]
+last_updated = "2026-06-08T07:41:15Z"
+last_revision = "2c606141936f1eeef17fa3043a72095b4765b9c2"
+source_type = "git"
+source = "https://github.com/forrestchang/andrej-karpathy-skills.git"
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."claude-md-management@claude-plugins-official"]
+enabled = true
+
+[plugins."code-review@claude-plugins-official"]
+enabled = true
+
+[plugins."code-simplifier@claude-plugins-official"]
+enabled = true
+
+[plugins."context7@claude-plugins-official"]
+enabled = true
+
+[plugins."frontend-design@claude-plugins-official"]
+enabled = true
+
+[plugins."github@claude-plugins-official"]
+enabled = true
+
+[plugins."linear@claude-plugins-official"]
+enabled = false
+
+[plugins."playwright@claude-plugins-official"]
+enabled = true
+
+[plugins."skill-creator@claude-plugins-official"]
+enabled = true
+
+[plugins."slack@claude-plugins-official"]
+enabled = false
+
+[plugins."superpowers@claude-plugins-official"]
+enabled = true
+
+[features]
+goals = true
+unified_exec = true
+child_agents_md = true
+multi_agent = true
+plugin_hooks = true
+plugins = true
+# cmux-codex-hooks-feature-78f1e4ba-66df-4d35-93c1-67fdf1cbb7df begin
+hooks = true
+# cmux-codex-hooks-feature-78f1e4ba-66df-4d35-93c1-67fdf1cbb7df end
+js_repl = false
+terminal_resize_reflow = true
+
+[mcp_servers.node_repl]
+command = "/Applications/Codex.app/Contents/Resources/node_repl"
+startup_timeout_sec = 120.0
+
+[mcp_servers.node_repl.env]
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.602.40724"
+CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
+CODEX_HOME = "/Users/ethan/.codex"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = ""
+NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/node"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "2de792ebdf729e85542c94275f6654821dddce546d9c7374c915f2297529e313"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/ethan/.codex"
+
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+
+[mcp_servers.github]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-github"]
+
+[mcp_servers.github.env]
+GITHUB_PERSONAL_ACCESS_TOKEN = "${GITHUB_MCP_PAT}"
+
+[mcp_servers.playwright]
+command = "npx"
+args = ["@playwright/mcp@latest"]
+
+[mcp_servers.slack_local]
+default_tools_approval_mode = "prompt"
+command = "/bin/zsh"
+args = ["-lc", "set -a; source ~/.zsh_secrets; source ~/.config/codex/slack-mcp.env; set +a; : ${SLACK_MCP_XOXP_TOKEN:-${SLACK_MCP_XOXB_TOKEN:?Set SLACK_MCP_XOXP_TOKEN or SLACK_MCP_XOXB_TOKEN in ~/.zsh_secrets}}; exec /Users/ethan/go/bin/slack-mcp-server --transport stdio"]
+
+[projects."/Users/ethan/workspace/maycoders/maycoders-dev/seoul4pm"]
+trust_level = "trusted"
+
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "five-hour-limit", "used-tokens", "task-progress"]
+status_line_use_colors = true
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
+
+[hooks.state]
+
+[hooks.state."/Users/ethan/workspace/maycoders/maycoders-dev/seoul4pm/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:6f1df8abfb11b460b1683027429e4a700a53ce31ee2b46011595c07d1316620c"
+
+[hooks.state."/Users/ethan/workspace/maycoders/maycoders-dev/seoul4pm/.codex/hooks.json:post_tool_use:0:1"]
+trusted_hash = "sha256:682022f06bf696a70ce8d427c0d42bbb10a8079a63642b8408044ab9ec9e8660"
+
+[hooks.state."superpowers@claude-plugins-official:hooks/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:62acbaff2b2f55f41971e21a164990aaa53c96919baa0a5eae2eb5db73b9e6e6"
+
+# cmux-codex-hook-trust-f5cc24da-7a09-4b20-a756-89e7786f6738 begin
+[hooks.state."/Users/ethan/.codex/hooks.json:pre_tool_use:0:0"]
+trusted_hash = "sha256:18576933129a317a96fa0fc8de336c18f778d17bb11ad296714b7e6ba9210503"
+[hooks.state."/Users/ethan/.codex/hooks.json:permission_request:0:0"]
+trusted_hash = "sha256:6a34cba190445388020800d6e694a8a61ff4734e94c564976f22e885c71f4ba9"
+[hooks.state."/Users/ethan/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:13d1ac3a063e35fa6337a769c64179df59806e8bed81159a773cb9e8629ec38a"
+[hooks.state."/Users/ethan/.codex/hooks.json:user_prompt_submit:0:0"]
+trusted_hash = "sha256:9561dc2cf7b9484d89eeb02fb3dacb0b9996cae4544fad9416bd3a121ca59cd1"
+[hooks.state."/Users/ethan/.codex/hooks.json:stop:0:0"]
+trusted_hash = "sha256:9730e678710781f3c6a9ff165f451001ecc6d95b18b4bc8ed42f6db92f284bee"
+# cmux-codex-hook-trust-f5cc24da-7a09-4b20-a756-89e7786f6738 end
+
+[permissions.seoul4pm-local]
+extends = ":workspace"
+
+[permissions.seoul4pm-local.filesystem]
+glob_scan_max_depth = 4
+"/Users/ethan/.infisical" = "read"
+"/Users/ethan/.infisical/**" = "read"
+"/Users/ethan/infisical-keyring" = "read"
+"/Users/ethan/infisical-keyring/**" = "read"
+
+[permissions.seoul4pm-local.network]
+enabled = true
+
+# Managed by LazyCodex: multi_agent_v2 is re-disabled on every Codex session start
+# because enabling it fails every turn with HTTP 400 (openai/codex#26753).
+# Opt out: LAZYCODEX_CONFIG_MIGRATION_DISABLED=1 (or OMO_CODEX_CONFIG_MIGRATION_DISABLED=1).
+[features.multi_agent_v2]
+enabled = false
+max_concurrent_threads_per_session = 10000
+hide_spawn_agent_metadata = false
+
+[notice]
+hide_world_writable_warning = true
+hide_full_access_warning = true
+
+[marketplaces.sisyphuslabs]
+last_updated = "2026-06-13T00:33:26Z"
+source_type = "local"
+source = "/Users/ethan/.codex/plugins/cache/sisyphuslabs"
+
+[plugins."omo@sisyphuslabs"]
+enabled = true
+
+[plugins."omo@sisyphuslabs".mcp_servers.context7]
+enabled = true
+
+[plugins."omo@sisyphuslabs".mcp_servers.git_bash]
+enabled = false
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:72359247df3fd7e9e9e590d577f185590ec62e487e1661485e5fca0736be0400"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:session_start:1:0"]
+trusted_hash = "sha256:31dd67ad8b3ed7b37a3d5daee52862c80ea9f8fc10802800d1e2451cef8d127e"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:session_start:2:0"]
+trusted_hash = "sha256:d9a341cf5dce5d51e7698ad4a99919aa014c2918a85eb2b5aacc236dea204cb2"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:user_prompt_submit:0:0"]
+trusted_hash = "sha256:8525a2bb8b69bb1ca3125530b4617f7b4dc804f6fa19a6d48f49a22276d826b0"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:user_prompt_submit:1:0"]
+trusted_hash = "sha256:e072620df36682985799142f32156fff26509c2033a2aa3f2145258e4da3a4a6"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:user_prompt_submit:2:0"]
+trusted_hash = "sha256:82a8186693ba140b8783704240d136a3fd2ae65915b7f611853f897894b24a7f"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:pre_tool_use:0:0"]
+trusted_hash = "sha256:6f8cda0daec87a79fbbbae54bb50607d72741186d465eac848ede74d9521fbc0"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:pre_tool_use:1:0"]
+trusted_hash = "sha256:e561b5101d199181fa07279ea913fcfd118e308ae244749fb12babcbaa249968"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:2ef269331b85135d00e3fb30945aef62a20d8d6b3c5b6bc59de9a3979b197c50"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:post_tool_use:0:1"]
+trusted_hash = "sha256:27e7724c4e793af9a514f38e0c8b6f2a5ad4b1c9201402909803f19640f969f1"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:post_tool_use:1:0"]
+trusted_hash = "sha256:d4d1c439463b2f461a3df81d0c5b2c0f0a80d698c191c8b3916e81ce66845db2"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:post_compact:0:0"]
+trusted_hash = "sha256:7a06912829fee6741754af4f055a38ba3f1024daa357310416ecfb92765b97be"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:post_compact:1:0"]
+trusted_hash = "sha256:20a893adc54dd0d7db46fff2d086e8e44a5bee38e8d03ff3b251448462cbe5f3"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:post_compact:2:0"]
+trusted_hash = "sha256:8dd0e54315daeb4ced23886ab524040dcf245414d248f10fbbc1839c8549ee3c"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:stop:0:0"]
+trusted_hash = "sha256:9106b6ac2f0ecd8d84d42b17b274e1e49ef78a52cb0ed637fbdf48315dc7621e"
+
+[hooks.state."omo@sisyphuslabs:hooks/hooks.json:subagent_stop:0:0"]
+trusted_hash = "sha256:3e2bb35ad0a7c34272719c8a202539b8030dc8fea86ebafd390ce0ec59b302d7"
+
+[agents.codex-ultrawork-reviewer]
+config_file = "./agents/codex-ultrawork-reviewer.toml"
+
+[agents.explorer]
+config_file = "./agents/explorer.toml"
+
+[agents.librarian]
+config_file = "./agents/librarian.toml"
+
+[agents.metis]
+config_file = "./agents/metis.toml"
+
+[agents.momus]
+config_file = "./agents/momus.toml"
+
+[agents.plan]
+config_file = "./agents/plan.toml"

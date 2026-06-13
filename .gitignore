@@ -4,3 +4,21 @@ ssh/.ssh/*
 
 # cmux auto-backup files
 cmux/.config/cmux/*.bak
+
+# Codex local state and credentials
+codex/.codex/auth.json
+codex/.codex/*.sqlite*
+codex/.codex/history.jsonl
+codex/.codex/session_index.jsonl
+codex/.codex/cache/
+codex/.codex/log/
+codex/.codex/sessions/
+codex/.codex/shell_snapshots/
+codex/.codex/.tmp/
+codex/.codex/tmp/
+codex/.codex/models_cache.json
+codex/.codex/installation_id
+codex/.codex/chrome-native-hosts-v2.json
+
+# Locally copied MCP/env secrets
+config/codex/*.env
