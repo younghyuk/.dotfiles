@@ -29,3 +29,20 @@ stow codex zsh agents claude
 ```
 
 `sync.sh`는 위 패키지를 `--restow`로 적용한다.
+
+## 스크립트 검증
+
+쉘 스크립트는 별도 테스트 프레임워크 대신 문법 검사, shellcheck, 실제 smoke run으로 검증한다:
+
+```bash
+bash -n sync.sh scripts/claude-mcp-sync.sh
+zsh -n zsh/.zprofile zsh/.zshrc
+shellcheck sync.sh scripts/claude-mcp-sync.sh
+./sync.sh
+```
+
+`shellcheck`가 없으면 설치한다:
+
+```bash
+brew install shellcheck
+```

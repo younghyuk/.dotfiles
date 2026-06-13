@@ -27,7 +27,7 @@ add_mcp_if_missing() {
 }
 
 add_mcp_if_missing github -s user --transport http https://api.githubcopilot.com/mcp/ \
-  --header 'Authorization: Bearer ${GITHUB_MCP_PAT}'
+  --header "Authorization: Bearer \${GITHUB_MCP_PAT}"
 
 add_mcp_if_missing context7 -s user \
   -- npx -y @upstash/context7-mcp

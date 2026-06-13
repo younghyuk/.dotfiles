@@ -205,6 +205,16 @@ run_smoke_checks() {
     fail 'zsh config syntax failed'
   fi
 
+  if has_command shellcheck; then
+    if shellcheck "$DOTFILES_DIR/sync.sh" "$DOTFILES_DIR/scripts/claude-mcp-sync.sh"; then
+      pass 'shellcheck passed'
+    else
+      fail 'shellcheck failed'
+    fi
+  else
+    warn 'shellcheck missing: brew install shellcheck'
+  fi
+
   check_secret_name "$HOME/.zsh_secrets" GITHUB_MCP_PAT
   if grep -Eq '^[[:space:]]*(export[[:space:]]+)?SLACK_MCP_(XOXP|XOXB)_TOKEN=' "$HOME/.zsh_secrets" 2>/dev/null; then
     pass 'Slack MCP token present in ~/.zsh_secrets'
