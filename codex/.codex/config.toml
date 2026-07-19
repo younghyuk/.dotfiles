@@ -9,6 +9,8 @@ model_reasoning_effort = "xhigh"
 plan_mode_reasoning_effort = "xhigh"
 network_access = "enabled"
 
+service_tier = "priority"
+
 [sandbox_workspace_write]
 network_access = false
 
@@ -55,7 +57,7 @@ enabled = true
 enabled = true
 
 [plugins."linear@claude-plugins-official"]
-enabled = false
+enabled = true
 
 [plugins."playwright@claude-plugins-official"]
 enabled = true
@@ -64,7 +66,7 @@ enabled = true
 enabled = true
 
 [plugins."slack@claude-plugins-official"]
-enabled = false
+enabled = true
 
 [plugins."superpowers@claude-plugins-official"]
 enabled = true
@@ -119,7 +121,7 @@ command = "/bin/zsh"
 args = ["-lc", "set -a; [ -f ~/.zsh_secrets ] && source ~/.zsh_secrets; [ -f ~/.config/codex/slack-mcp.env ] && source ~/.config/codex/slack-mcp.env; set +a; : ${SLACK_MCP_XOXP_TOKEN:-${SLACK_MCP_XOXB_TOKEN:?Set SLACK_MCP_XOXP_TOKEN or SLACK_MCP_XOXB_TOKEN in ~/.zsh_secrets}}; exec \"${GOBIN:-$(go env GOPATH)/bin}/slack-mcp-server\" --transport stdio"]
 
 [tui]
-status_line = ["model-with-reasoning", "current-dir", "five-hour-limit", "used-tokens", "task-progress"]
+status_line = ["model-with-reasoning", "current-dir", "used-tokens", "task-progress", "git-branch", "context-used", "five-hour-limit", "weekly-limit"]
 status_line_use_colors = true
 
 [tui.model_availability_nux]
@@ -161,6 +163,30 @@ config_file = "./agents/momus.toml"
 [agents.plan]
 config_file = "./agents/plan.toml"
 
+[plugins."omo@sisyphuslabs".mcp_servers.codegraph]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
+enabled = true
+
+[plugins."chrome-devtools-mcp@claude-plugins-official"]
+enabled = true
+
+[plugins."sentry@claude-plugins-official"]
+enabled = true
+
+[plugins."andrej-karpathy-skills@karpathy-skills"]
+enabled = true
+
+[plugins."typescript-lsp@claude-plugins-official"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
 [agents.lazycodex-clone-fidelity-reviewer]
 config_file = "./agents/lazycodex-clone-fidelity-reviewer.toml"
 
@@ -175,6 +201,11 @@ config_file = "./agents/lazycodex-gate-reviewer.toml"
 
 [agents.lazycodex-qa-executor]
 config_file = "./agents/lazycodex-qa-executor.toml"
+
+[desktop]
+conversationDetailMode = "STEPS_COMMANDS"
+ambient-suggestions-enabled = false
+followUpQueueMode = "queue"
 
 [agents]
 max_threads = 1000
