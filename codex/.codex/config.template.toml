@@ -214,6 +214,15 @@ config_file = "./agents/lazycodex-gate-reviewer.toml"
 [agents.lazycodex-qa-executor]
 config_file = "./agents/lazycodex-qa-executor.toml"
 
+[agents.lazycodex-worker-high]
+config_file = "./agents/lazycodex-worker-high.toml"
+
+[agents.lazycodex-worker-low]
+config_file = "./agents/lazycodex-worker-low.toml"
+
+[agents.lazycodex-worker-medium]
+config_file = "./agents/lazycodex-worker-medium.toml"
+
 [desktop]
 conversationDetailMode = "STEPS_COMMANDS"
 ambient-suggestions-enabled = false
