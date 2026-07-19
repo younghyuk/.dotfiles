@@ -48,6 +48,46 @@ sync_git() {
   fi
 }
 
+sync_codex_config() {
+  section 'Codex config'
+
+  local live="$HOME/.codex/config.toml"
+  local template="$DOTFILES_DIR/codex/.codex/config.template.toml"
+
+  if [[ ! -f "$template" ]]; then
+    fail "config template missing: $template"
+    return
+  fi
+
+  mkdir -p "$HOME/.codex"
+
+  if [[ -L "$live" ]]; then
+    if [[ -e "$live" ]]; then
+      # Old layout: symlink into the repo. Detach it, keeping current content.
+      local tmp
+      tmp="$(mktemp)"
+      cat "$live" >"$tmp"
+      rm "$live"
+      mv "$tmp" "$live"
+      pass 'live config detached from repo symlink (content preserved)'
+    else
+      # Dangling symlink: repo copy was removed by git pull before migration ran.
+      rm "$live"
+      cp "$template" "$live"
+      warn 'dangling config symlink replaced from template; re-approve hooks/projects in Codex'
+    fi
+    return
+  fi
+
+  if [[ ! -f "$live" ]]; then
+    cp "$template" "$live"
+    pass 'live config bootstrapped from template'
+    return
+  fi
+
+  pass 'live config is a machine-local file'
+}
+
 sync_stow() {
   section 'Stow'
 
@@ -205,7 +245,12 @@ run_smoke_checks() {
   check_command codex 'Install Codex CLI/App first.'
   check_command python3 'brew install python'
 
-  check_symlink "$HOME/.codex/config.toml" "../.dotfiles/codex/.codex/config.toml"
+  if [[ -f "$HOME/.codex/config.toml" && ! -L "$HOME/.codex/config.toml" ]]; then
+    pass "$HOME/.codex/config.toml is a machine-local file"
+  else
+    fail "$HOME/.codex/config.toml should be a regular file, not a symlink (rerun sync.sh)"
+  fi
+  check_symlink "$HOME/.codex/config.template.toml" "../.dotfiles/codex/.codex/config.template.toml"
   check_symlink "$HOME/.codex/hooks.json" "../.dotfiles/codex/.codex/hooks.json"
   check_symlink "$HOME/.codex/agents" "../.dotfiles/codex/.codex/agents"
   check_symlink "$HOME/.agents/skills" "../.dotfiles/agents/.agents/skills"
@@ -225,8 +270,14 @@ run_smoke_checks() {
     fail 'zsh config syntax failed'
   fi
 
+  if bash "$DOTFILES_DIR/scripts/codex-config-diff.sh" >/dev/null 2>&1; then
+    pass 'codex config matches template'
+  else
+    warn 'codex config drifted from template; run scripts/codex-config-diff.sh'
+  fi
+
   if has_command shellcheck; then
-    if shellcheck "$DOTFILES_DIR/sync.sh" "$DOTFILES_DIR/scripts/claude-mcp-sync.sh"; then
+    if shellcheck "$DOTFILES_DIR/sync.sh" "$DOTFILES_DIR/scripts/claude-mcp-sync.sh" "$DOTFILES_DIR/scripts/codex-config-diff.sh"; then
       pass 'shellcheck passed'
     else
       fail 'shellcheck failed'
@@ -259,6 +310,7 @@ printf 'dotfiles: %s\n' "$DOTFILES_DIR"
 
 sync_git
 sync_homebrew
+sync_codex_config
 sync_stow
 sync_slack_mcp_server
 sync_lazycodex

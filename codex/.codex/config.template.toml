@@ -1,0 +1,223 @@
+# Codex user config template — the source of truth for intentional settings.
+#
+# The live file (~/.codex/config.toml) is NOT tracked in git: Codex keeps
+# writing machine state into it (project trust levels, hook trusted hashes,
+# marketplace timestamps, app-managed mcp servers), which made every clone
+# permanently dirty. See https://github.com/openai/codex/issues/14601.
+#
+# New machine:  cp codex/.codex/config.template.toml ~/.codex/config.toml
+#               (sync.sh does this automatically when the live file is missing)
+# Check drift:  scripts/codex-config-diff.sh
+# Changed a setting on purpose? Mirror it here so other machines pick it up.
+
+approval_policy = "never"
+approvals_reviewer = "user"
+sandbox_mode = "danger-full-access"
+default_permissions = ":workspace"
+web_search = "cached"
+model = "gpt-5.5"
+model_context_window = 400000
+model_reasoning_effort = "xhigh"
+plan_mode_reasoning_effort = "xhigh"
+network_access = "enabled"
+
+service_tier = "priority"
+
+[sandbox_workspace_write]
+network_access = false
+
+[marketplaces.claude-plugins-official]
+last_updated = "2026-06-13T06:49:38Z"
+last_revision = "ac16ffafcd700e306d8a0fe96e9633ac8a3154e9"
+source_type = "git"
+source = "https://github.com/anthropics/claude-plugins-official.git"
+
+[marketplaces.karpathy-skills]
+last_updated = "2026-06-13T06:49:40Z"
+last_revision = "2c606141936f1eeef17fa3043a72095b4765b9c2"
+source_type = "git"
+source = "https://github.com/forrestchang/andrej-karpathy-skills.git"
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."claude-md-management@claude-plugins-official"]
+enabled = true
+
+[plugins."code-review@claude-plugins-official"]
+enabled = true
+
+[plugins."code-simplifier@claude-plugins-official"]
+enabled = true
+
+[plugins."context7@claude-plugins-official"]
+enabled = true
+
+[plugins."frontend-design@claude-plugins-official"]
+enabled = true
+
+[plugins."github@claude-plugins-official"]
+enabled = true
+
+[plugins."linear@claude-plugins-official"]
+enabled = true
+
+[plugins."playwright@claude-plugins-official"]
+enabled = true
+
+[plugins."skill-creator@claude-plugins-official"]
+enabled = true
+
+[plugins."slack@claude-plugins-official"]
+enabled = true
+
+[plugins."superpowers@claude-plugins-official"]
+enabled = true
+
+[features]
+goals = true
+unified_exec = true
+child_agents_md = true
+multi_agent = true
+plugin_hooks = true
+plugins = true
+# cmux-codex-hooks-feature-78f1e4ba-66df-4d35-93c1-67fdf1cbb7df begin
+hooks = true
+# cmux-codex-hooks-feature-78f1e4ba-66df-4d35-93c1-67fdf1cbb7df end
+js_repl = false
+terminal_resize_reflow = true
+
+[mcp_servers.node_repl]
+command = "/Applications/Codex.app/Contents/Resources/node_repl"
+startup_timeout_sec = 120.0
+
+[mcp_servers.node_repl.env]
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.602.40724"
+CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = ""
+NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/node"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "2de792ebdf729e85542c94275f6654821dddce546d9c7374c915f2297529e313"
+
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+
+[mcp_servers.github]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-github"]
+
+[mcp_servers.github.env]
+GITHUB_PERSONAL_ACCESS_TOKEN = "${GITHUB_MCP_PAT}"
+
+[mcp_servers.playwright]
+command = "npx"
+args = ["@playwright/mcp@latest"]
+
+[mcp_servers.slack_local]
+default_tools_approval_mode = "prompt"
+command = "/bin/zsh"
+args = ["-lc", "set -a; [ -f ~/.zsh_secrets ] && source ~/.zsh_secrets; [ -f ~/.config/codex/slack-mcp.env ] && source ~/.config/codex/slack-mcp.env; set +a; : ${SLACK_MCP_XOXP_TOKEN:-${SLACK_MCP_XOXB_TOKEN:?Set SLACK_MCP_XOXP_TOKEN or SLACK_MCP_XOXB_TOKEN in ~/.zsh_secrets}}; exec \"${GOBIN:-$(go env GOPATH)/bin}/slack-mcp-server\" --transport stdio"]
+
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "used-tokens", "task-progress", "git-branch", "context-used", "five-hour-limit", "weekly-limit"]
+status_line_use_colors = true
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
+
+# Managed by LazyCodex: multi_agent_v2 is re-disabled on every Codex session start
+# because enabling it fails every turn with HTTP 400 (openai/codex#26753).
+# Opt out: LAZYCODEX_CONFIG_MIGRATION_DISABLED=1 (or OMO_CODEX_CONFIG_MIGRATION_DISABLED=1).
+[features.multi_agent_v2]
+enabled = false
+max_concurrent_threads_per_session = 1000
+hide_spawn_agent_metadata = false
+
+[notice]
+hide_world_writable_warning = true
+hide_full_access_warning = true
+
+[plugins."omo@sisyphuslabs"]
+enabled = true
+
+[plugins."omo@sisyphuslabs".mcp_servers.context7]
+enabled = true
+
+[plugins."omo@sisyphuslabs".mcp_servers.git_bash]
+enabled = false
+
+[agents.explorer]
+config_file = "./agents/explorer.toml"
+
+[agents.librarian]
+config_file = "./agents/librarian.toml"
+
+[agents.metis]
+config_file = "./agents/metis.toml"
+
+[agents.momus]
+config_file = "./agents/momus.toml"
+
+[agents.plan]
+config_file = "./agents/plan.toml"
+
+[plugins."omo@sisyphuslabs".mcp_servers.codegraph]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
+enabled = true
+
+[plugins."chrome-devtools-mcp@claude-plugins-official"]
+enabled = true
+
+[plugins."sentry@claude-plugins-official"]
+enabled = true
+
+[plugins."andrej-karpathy-skills@karpathy-skills"]
+enabled = true
+
+[plugins."typescript-lsp@claude-plugins-official"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[agents.lazycodex-clone-fidelity-reviewer]
+config_file = "./agents/lazycodex-clone-fidelity-reviewer.toml"
+
+[agents.lazycodex-code-reviewer]
+config_file = "./agents/lazycodex-code-reviewer.toml"
+
+[agents.lazycodex-executor]
+config_file = "./agents/lazycodex-executor.toml"
+
+[agents.lazycodex-gate-reviewer]
+config_file = "./agents/lazycodex-gate-reviewer.toml"
+
+[agents.lazycodex-qa-executor]
+config_file = "./agents/lazycodex-qa-executor.toml"
+
+[desktop]
+conversationDetailMode = "STEPS_COMMANDS"
+ambient-suggestions-enabled = false
+followUpQueueMode = "queue"
+
+[agents]
+max_threads = 1000

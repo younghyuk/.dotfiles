@@ -6,6 +6,8 @@ ssh/.ssh/*
 cmux/.config/cmux/*.bak
 
 # Codex local state and credentials
+# Live config is per-machine (Codex writes state into it); track config.template.toml instead.
+codex/.codex/config.toml
 codex/.codex/auth.json
 codex/.codex/*.sqlite*
 codex/.codex/history.jsonl
