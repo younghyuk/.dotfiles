@@ -130,7 +130,7 @@ status_line_use_colors = true
 # Opt out: LAZYCODEX_CONFIG_MIGRATION_DISABLED=1 (or OMO_CODEX_CONFIG_MIGRATION_DISABLED=1).
 [features.multi_agent_v2]
 enabled = false
-max_concurrent_threads_per_session = 10000
+max_concurrent_threads_per_session = 1000
 hide_spawn_agent_metadata = false
 
 [notice]
@@ -146,9 +146,6 @@ enabled = true
 [plugins."omo@sisyphuslabs".mcp_servers.git_bash]
 enabled = false
 
-[agents.codex-ultrawork-reviewer]
-config_file = "./agents/codex-ultrawork-reviewer.toml"
-
 [agents.explorer]
 config_file = "./agents/explorer.toml"
 
@@ -163,3 +160,21 @@ config_file = "./agents/momus.toml"
 
 [agents.plan]
 config_file = "./agents/plan.toml"
+
+[agents.lazycodex-clone-fidelity-reviewer]
+config_file = "./agents/lazycodex-clone-fidelity-reviewer.toml"
+
+[agents.lazycodex-code-reviewer]
+config_file = "./agents/lazycodex-code-reviewer.toml"
+
+[agents.lazycodex-executor]
+config_file = "./agents/lazycodex-executor.toml"
+
+[agents.lazycodex-gate-reviewer]
+config_file = "./agents/lazycodex-gate-reviewer.toml"
+
+[agents.lazycodex-qa-executor]
+config_file = "./agents/lazycodex-qa-executor.toml"
+
+[agents]
+max_threads = 1000
