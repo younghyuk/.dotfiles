@@ -1,0 +1,31 @@
+# claude 패키지 로컬 stow 무시목록.
+# 주의: 패키지-로컬 .stow-local-ignore 는 stow 의 "기본 무시목록을 대체"하므로,
+# 표준 기본 패턴(VCS/emacs/README)을 여기서도 유지한다(루트 .stow-local-ignore 와 동형).
+
+RCS
+.+,v
+
+CVS
+\.\#.+       # CVS conflict files / emacs lock files
+\.cvsignore
+
+\.svn
+_darcs
+\.hg
+
+\.git
+\.gitignore
+\.gitmodules
+
+.+~          # emacs backup files
+\#.*\#       # emacs autosave files
+
+^/README.*
+^/LICENSE.*
+^/COPYING
+
+# settings.json 은 stow 대상이 아니다 — orca(멀티에이전트 오케스트레이터)가 런타임에
+# ~/.claude/settings.json 에 라이프사이클 훅을 주입하며 그 파일을 소유한다. 심링크하면
+# orca 의 쓰기가 dotfiles 정본을 오염시키거나 심링크를 일반파일로 되돌린다(구조적 충돌).
+# 여기의 settings.json 은 "정본 base"(신규 머신 부트스트랩 시 복사 소스)로만 유지한다.
+settings\.json

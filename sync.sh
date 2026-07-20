@@ -103,6 +103,84 @@ sync_stow() {
   fi
 }
 
+# ~/.claude/settings.json is NOT stow-symlinked: Orca (the multi-agent cockpit)
+# injects runtime `hooks` into it at launch, which would pollute the repo or
+# break a symlink. Instead the repo holds the canonical base; here we merge the
+# base into the machine-local live file while preserving Orca's runtime keys.
+sync_claude_settings() {
+  section 'Claude settings'
+
+  local base="$DOTFILES_DIR/claude/.claude/settings.json"
+  local live="$HOME/.claude/settings.json"
+
+  if [[ ! -f "$base" ]]; then
+    fail "claude settings base missing: $base"
+    return
+  fi
+
+  if ! has_command jq; then
+    fail 'jq missing: brew install jq (needed to merge claude settings)'
+    return
+  fi
+
+  mkdir -p "$HOME/.claude"
+
+  # Fresh machine: seed from base; Orca injects its hooks on next launch.
+  if [[ ! -f "$live" ]]; then
+    cp "$base" "$live"
+    pass 'claude settings bootstrapped from base'
+    return
+  fi
+
+  # Old layout: live was a repo symlink. Detach to a machine-local file so Orca
+  # can inject without writing through into the repo.
+  if [[ -L "$live" ]]; then
+    local detached
+    detached="$(mktemp)"
+    cat "$live" >"$detached"
+    rm "$live"
+    mv "$detached" "$live"
+    warn 'claude settings detached from repo symlink (now machine-local)'
+  fi
+
+  # Merge: base is authoritative for the keys it defines; jq `*` deep-merges
+  # objects (base wins) and replaces arrays wholesale (intended for the
+  # permission/allowlist arrays). Runtime/machine-local keys are preserved from
+  # live: `hooks` (Orca/cmux inject these each launch) and `model` (per-session
+  # choice). base.model still serves as the fresh-machine default via the cp path
+  # above; on an existing machine the live value wins. The explicit re-assigns
+  # also keep live's values even if these keys are added to base by mistake.
+  local merged
+  merged="$(mktemp)"
+  if ! jq -s '
+        .[0] as $live | .[1] as $base
+        | ($live * $base)
+        | if $live.hooks then .hooks = $live.hooks else . end
+        | if $live.model then .model = $live.model else . end
+      ' "$live" "$base" >"$merged" 2>/dev/null || [[ ! -s "$merged" ]]; then
+    rm -f "$merged"
+    fail 'claude settings merge failed (invalid JSON in base or live?)'
+    return
+  fi
+
+  # Only rewrite on a semantic change, to avoid reformatting churn that would
+  # fight Orca's own writes. Compare canonicalized (sorted-key) forms via temp
+  # files rather than process substitution, so this works in restricted shells.
+  local live_canon merged_canon
+  live_canon="$(mktemp)"
+  merged_canon="$(mktemp)"
+  jq -S . "$live" >"$live_canon" 2>/dev/null
+  jq -S . "$merged" >"$merged_canon" 2>/dev/null
+  if cmp -s "$live_canon" "$merged_canon"; then
+    rm -f "$merged" "$live_canon" "$merged_canon"
+    pass 'claude settings already in sync'
+  else
+    rm -f "$live_canon" "$merged_canon"
+    mv "$merged" "$live"
+    pass 'claude settings: base merged (orca hooks preserved)'
+  fi
+}
+
 sync_homebrew() {
   section 'Homebrew'
 
@@ -250,6 +328,16 @@ run_smoke_checks() {
   else
     fail "$HOME/.codex/config.toml should be a regular file, not a symlink (rerun sync.sh)"
   fi
+
+  if [[ -f "$HOME/.claude/settings.json" && ! -L "$HOME/.claude/settings.json" ]]; then
+    if ! has_command jq || jq -e . "$HOME/.claude/settings.json" >/dev/null 2>&1; then
+      pass "$HOME/.claude/settings.json is a machine-local file"
+    else
+      fail "$HOME/.claude/settings.json is invalid JSON"
+    fi
+  else
+    fail "$HOME/.claude/settings.json should be a regular file, not a symlink (rerun sync.sh)"
+  fi
   check_symlink "$HOME/.codex/config.template.toml" "../.dotfiles/codex/.codex/config.template.toml"
   check_symlink "$HOME/.codex/hooks.json" "../.dotfiles/codex/.codex/hooks.json"
   check_symlink "$HOME/.codex/agents" "../.dotfiles/codex/.codex/agents"
@@ -312,6 +400,7 @@ sync_git
 sync_homebrew
 sync_codex_config
 sync_stow
+sync_claude_settings
 sync_slack_mcp_server
 sync_lazycodex
 sync_claude
