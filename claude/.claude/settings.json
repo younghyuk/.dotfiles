@@ -175,7 +175,7 @@
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
-    "excludedCommands": ["git", "ssh", "scp", "aws", "pulumi", "infisical"],
+    "excludedCommands": ["git *", "ssh *", "scp *", "aws *", "pulumi *", "infisical *"],
     "network": {
       "allowedDomains": [
         "github.com",
