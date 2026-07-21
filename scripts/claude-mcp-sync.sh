@@ -35,4 +35,11 @@ add_mcp_if_missing context7 -s user \
 add_mcp_if_missing playwright -s user \
   -- npx @playwright/mcp@latest
 
+# GA4 읽기전용 (서비스계정). 키는 1Password → ~/.config/gcloud/ga-sa-key.json (bootstrap.sh).
+# 여기엔 키 경로+프로젝트id 만 — 비밀 아님.
+add_mcp_if_missing analytics-mcp -s user \
+  -e "GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/ga-sa-key.json" \
+  -e "GOOGLE_PROJECT_ID=seoul4pm-459908" \
+  -- uvx analytics-mcp
+
 exit "$STATUS"

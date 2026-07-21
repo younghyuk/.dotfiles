@@ -96,8 +96,8 @@ sync_stow() {
     return
   fi
 
-  if (cd "$DOTFILES_DIR" && stow --restow codex zsh agents claude); then
-    pass 'stow packages restowed: codex zsh agents claude'
+  if (cd "$DOTFILES_DIR" && stow --restow codex zsh agents claude gcloud); then
+    pass 'stow packages restowed: codex zsh agents claude gcloud'
   else
     fail 'stow --restow failed'
   fi

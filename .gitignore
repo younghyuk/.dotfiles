@@ -28,3 +28,11 @@ codex/.codex/skills/.system/
 
 # Locally copied MCP/env secrets
 config/codex/*.env
+
+# gcloud: 크리덴셜은 절대 추적 안 함 (live ~/.config/gcloud 는 비밀+설정 혼재라 stow/추적 안 함).
+# gcloud/ 패키지엔 스크립트만 두지만, 실수 대비 가드:
+gcloud/**/ga-sa-key.json
+gcloud/**/*credentials*
+gcloud/**/*.db
+gcloud/**/legacy_credentials/
+gcloud/.config/gcloud/

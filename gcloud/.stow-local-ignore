@@ -1,0 +1,28 @@
+# gcloud 패키지 로컬 stow 무시목록.
+# 주의: 패키지-로컬 .stow-local-ignore 는 stow 의 "기본 무시목록을 대체"하므로,
+# 표준 기본 패턴(VCS/emacs/README)을 여기서도 유지한다(루트 .stow-local-ignore 와 동형).
+
+RCS
+.+,v
+
+CVS
+\.\#.+       # CVS conflict files / emacs lock files
+\.cvsignore
+
+\.svn
+_darcs
+\.hg
+
+\.git
+\.gitignore
+\.gitmodules
+
+.+~          # emacs backup files
+\#.*\#       # emacs autosave files
+
+^/README.*
+^/LICENSE.*
+^/COPYING
+
+# bootstrap.sh 는 stow 대상 아님 — 직접 실행용(홈에 링크 금지).
+^/bootstrap\.sh$

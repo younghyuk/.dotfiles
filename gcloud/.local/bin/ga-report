@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# ga-report — GA4 읽기전용 조회 (서비스계정 사용).
+#
+#   ga-report                 속성 목록 (id 자동 발견)
+#   ga-report <property_id>   해당 속성 최근 30일 핵심 지표
+#   ga-report <property_id> 7 최근 7일
+#
+# 전제: bootstrap.sh 로 SA 키 복원 + `gcloud auth activate-service-account` 완료.
+# 비밀 없음 — 토큰은 매 실행 발급.
+set -euo pipefail
+
+SA="${GA_SA_ACCOUNT:-ethan-claude-ga-reader@seoul4pm-459908.iam.gserviceaccount.com}"
+PROJ="${GA_QUOTA_PROJECT:-seoul4pm-459908}"
+SCOPE="https://www.googleapis.com/auth/analytics.readonly"
+ADMIN="https://analyticsadmin.googleapis.com/v1beta"
+DATA="https://analyticsdata.googleapis.com/v1beta"
+
+command -v gcloud >/dev/null || { echo "gcloud 없음 — bootstrap.sh 실행"; exit 1; }
+TOKEN="$(gcloud auth print-access-token --account="$SA" --scopes="$SCOPE" 2>/dev/null)" \
+  || { echo "SA 토큰 발급 실패 — bootstrap.sh 로 키 복원/activate 하세요"; exit 1; }
+
+# 서비스계정은 자기 프로젝트를 quota 로 자동 사용 → X-Goog-User-Project 헤더 불필요.
+# (헤더를 붙이면 serviceusage.services.use 권한을 요구해 USER_PROJECT_DENIED 발생)
+api() { curl -s -H "Authorization: Bearer $TOKEN" "$@"; }
+
+PID="${1:-}"
+if [[ -z "$PID" ]]; then
+  echo "=== GA4 속성 목록 ==="
+  api "$ADMIN/accountSummaries?pageSize=200" | python3 -c '
+import json,sys
+d=json.load(sys.stdin)
+if "error" in d: print("ERROR:", json.dumps(d["error"],ensure_ascii=False)); sys.exit(1)
+n=0
+for a in d.get("accountSummaries",[]):
+    print("■", a.get("displayName"))
+    for p in a.get("propertySummaries",[]):
+        n+=1; print("   -", p.get("displayName"), "| id:", p.get("property","").split("/")[-1])
+if not n: print("(속성 없음 — GA 콘솔에서 SA 를 속성 뷰어로 부여했는지 확인)")
+'
+  exit 0
+fi
+
+DAYS="${2:-30}"
+echo "=== property $PID · 최근 ${DAYS}일 (yesterday 기준) ==="
+api -H "Content-Type: application/json" "$DATA/properties/${PID}:runReport" \
+  -d "{\"dateRanges\":[{\"startDate\":\"${DAYS}daysAgo\",\"endDate\":\"yesterday\"}],
+       \"metrics\":[{\"name\":\"sessions\"},{\"name\":\"totalUsers\"},{\"name\":\"activeUsers\"},
+                    {\"name\":\"screenPageViews\"},{\"name\":\"conversions\"},{\"name\":\"ecommercePurchases\"}]}" \
+| python3 -c '
+import json,sys
+d=json.load(sys.stdin)
+if "error" in d: print("ERROR:", json.dumps(d["error"],ensure_ascii=False)); sys.exit(1)
+hdr=[h["name"] for h in d.get("metricHeaders",[])]
+rows=d.get("rows",[])
+if not rows: print("(데이터 없음)"); sys.exit(0)
+for k,v in zip(hdr,[x["value"] for x in rows[0]["metricValues"]]): print(f"  {k:18s}: {v}")
+'
