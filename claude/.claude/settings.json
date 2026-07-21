@@ -175,7 +175,7 @@
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
-    "excludedCommands": ["git *", "ssh *", "scp *", "aws *", "pulumi *", "infisical *"],
+    "excludedCommands": ["git *", "ssh *", "scp *", "aws *", "pulumi *", "infisical *", "gcloud *"],
     "network": {
       "allowedDomains": [
         "github.com",
@@ -185,13 +185,14 @@
         "infisical.maycoders.com",
         "api.anthropic.com",
         "sentry.io",
-        "*.sentry.io"
+        "*.sentry.io",
+        "*.googleapis.com"
       ],
       "allowLocalBinding": true,
       "allowUnixSockets": ["/var/run/docker.sock", "/Users/ethan/.docker/run/docker.sock"]
     },
     "filesystem": {
-      "denyRead": ["~/.ssh", "~/.aws"]
+      "denyRead": ["~/.ssh", "~/.aws", "~/.config/gcloud"]
     }
   },
   "model": "claude-fable-5[1m]",
