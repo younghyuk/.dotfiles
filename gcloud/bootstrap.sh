@@ -132,7 +132,10 @@ cleanup() {
 trap cleanup EXIT
 
 printf '\n1/3 GA reader impersonated ADC 생성\n'
-gcloud auth application-default login "$USER_ACCOUNT" \
+# 위치 인자 ACCOUNT는 impersonation 모드와 함께 쓰면 안 됨: 이 모드의 브라우저
+# 플로우는 cloud-platform 스코프만 요청해 id_token이 없고, ACCOUNT 검증이
+# id_token 디코드를 시도하다 크래시함 (None could not be converted to bytes).
+gcloud auth application-default login \
   --impersonate-service-account="$GA_SERVICE_ACCOUNT" \
   --scopes=openid,https://www.googleapis.com/auth/userinfo.email,https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/analytics.readonly \
   --project="$PROJECT_ID" \
@@ -141,7 +144,7 @@ check_adc 'GA candidate' "$DEFAULT_ADC" impersonated_service_account "$GA_SERVIC
 install -m 600 "$DEFAULT_ADC" "$GA_CANDIDATE"
 
 printf '\n2/3 BigQuery reader impersonated ADC 생성\n'
-gcloud auth application-default login "$USER_ACCOUNT" \
+gcloud auth application-default login \
   --impersonate-service-account="$BQ_SERVICE_ACCOUNT" \
   --project="$PROJECT_ID" \
   --quiet
