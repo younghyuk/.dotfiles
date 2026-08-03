@@ -26,6 +26,28 @@ add_mcp_if_missing() {
   fi
 }
 
+remove_user_mcp_if_present() {
+  local name="$1"
+  local details
+  details="$(claude mcp get "$name" 2>/dev/null || true)"
+
+  if ! printf '%s\n' "$details" | grep -Fq 'Scope: User config'; then
+    printf 'PASS claude user mcp %s absent\n' "$name"
+    return
+  fi
+
+  if claude mcp remove "$name" -s user; then
+    printf 'PASS claude user mcp %s removed\n' "$name"
+  else
+    STATUS=1
+    printf 'FAIL claude user mcp %s removal failed\n' "$name"
+  fi
+}
+
+# Google Analytics is project-scoped and uses adc-ga-reader.json from each
+# repo's .mcp.json. Remove the obsolete user entry that pointed at ga-sa-key.json.
+remove_user_mcp_if_present analytics-mcp
+
 add_mcp_if_missing github -s user --transport http https://api.githubcopilot.com/mcp/ \
   --header "Authorization: Bearer \${GITHUB_MCP_PAT}"
 
@@ -35,11 +57,8 @@ add_mcp_if_missing context7 -s user \
 add_mcp_if_missing playwright -s user \
   -- npx @playwright/mcp@latest
 
-# GA4 읽기전용 (서비스계정). 키는 1Password → ~/.config/gcloud/ga-sa-key.json (bootstrap.sh).
-# 여기엔 키 경로+프로젝트id 만 — 비밀 아님.
-add_mcp_if_missing analytics-mcp -s user \
-  -e "GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/ga-sa-key.json" \
-  -e "GOOGLE_PROJECT_ID=seoul4pm-459908" \
-  -- uvx analytics-mcp
+# PostHog (remote HTTP). 첫 사용 시 브라우저 OAuth 로그인(사전 키 불필요, US/EU 자동 라우팅).
+# 스토어프론트 애널리틱스 파일럿 데이터 조회용(project 531529).
+add_mcp_if_missing posthog -s user --transport http https://mcp.posthog.com/mcp
 
 exit "$STATUS"
