@@ -6,101 +6,99 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/vercel-labs/skills.git",
       "skillPath": "skills/find-skills/SKILL.md",
-      "skillFolderHash": "3013fdeb8a11b10b1eb795ec3ae8bfca38f7c26d",
+      "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
       "installedAt": "2026-05-11T02:19:38.102Z",
-      "updatedAt": "2026-05-14T02:25:45.814Z"
+      "updatedAt": "2026-08-03T15:55:45.687Z"
     },
     "cmux": {
       "source": "manaflow-ai/cmux",
       "sourceType": "github",
       "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
       "skillPath": "skills/cmux/SKILL.md",
-      "skillFolderHash": "d7b4a428df22553048a6830f4b5f3733fe1f9393",
+      "skillFolderHash": "ca1f2bb7e8415df068dd74aa71e8edbd64413d13",
       "installedAt": "2026-05-17T23:53:18.674Z",
-      "updatedAt": "2026-05-17T23:53:18.674Z"
+      "updatedAt": "2026-08-03T15:55:55.234Z"
     },
     "cmux-browser": {
       "source": "manaflow-ai/cmux",
       "sourceType": "github",
       "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
       "skillPath": "skills/cmux-browser/SKILL.md",
-      "skillFolderHash": "6d5dfc4de15faae37f932fa71f2bc9943bd2dafe",
+      "skillFolderHash": "9a041083aa27b3127d59e631aa2b4f6be9bd683b",
       "installedAt": "2026-05-17T23:53:18.678Z",
-      "updatedAt": "2026-05-17T23:53:18.678Z"
+      "updatedAt": "2026-08-03T15:56:05.143Z"
     },
     "cmux-customization": {
       "source": "manaflow-ai/cmux",
       "sourceType": "github",
       "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
       "skillPath": "skills/cmux-customization/SKILL.md",
-      "skillFolderHash": "47bb4ea3d247fe634734674ec3d39e1224aed0e1",
+      "skillFolderHash": "ed2b4a7674fb5dd1cea34de762b146ca88032a74",
       "installedAt": "2026-05-17T23:53:18.680Z",
-      "updatedAt": "2026-05-17T23:53:18.680Z"
+      "updatedAt": "2026-08-03T15:56:16.229Z"
     },
     "cmux-diagnostics": {
       "source": "manaflow-ai/cmux",
       "sourceType": "github",
       "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
       "skillPath": "skills/cmux-diagnostics/SKILL.md",
-      "skillFolderHash": "bbcedcd6e38891c7a2c0493e397d2c3ddf3d8633",
+      "skillFolderHash": "d418a30cf7582d7b7f4ff9202e0493174a57eced",
       "installedAt": "2026-05-17T23:53:18.681Z",
-      "updatedAt": "2026-05-17T23:53:18.681Z"
+      "updatedAt": "2026-08-03T15:56:26.049Z"
     },
     "cmux-markdown": {
       "source": "manaflow-ai/cmux",
       "sourceType": "github",
       "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
       "skillPath": "skills/cmux-markdown/SKILL.md",
-      "skillFolderHash": "c6cf70a1ad9f98867a652dc03ded80905c2706c8",
+      "skillFolderHash": "a8e4b5c4aeea3fb054b3190a9f02a1f28ab53467",
       "installedAt": "2026-05-17T23:53:18.683Z",
-      "updatedAt": "2026-05-17T23:53:18.683Z"
+      "updatedAt": "2026-08-03T15:56:36.132Z"
     },
     "cmux-settings": {
       "source": "manaflow-ai/cmux",
       "sourceType": "github",
       "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
       "skillPath": "skills/cmux-settings/SKILL.md",
-      "skillFolderHash": "69a255e196c8b6caa0e86b364b2d70cd7be43ba5",
+      "skillFolderHash": "780aae4361776ecbf15b8d37fc30930e79abd427",
       "installedAt": "2026-05-17T23:53:18.684Z",
-      "updatedAt": "2026-06-09T02:22:52.495Z"
+      "updatedAt": "2026-08-03T15:56:50.184Z"
     },
     "cmux-workspace": {
       "source": "manaflow-ai/cmux",
       "sourceType": "github",
       "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
       "skillPath": "skills/cmux-workspace/SKILL.md",
-      "skillFolderHash": "b8a24863c44d8233c1c9ed760fe91876c8265321",
+      "skillFolderHash": "80ddccaf21ad5f9500771fbc4bbff92f7a90673b",
       "installedAt": "2026-05-17T23:53:18.684Z",
-      "updatedAt": "2026-05-17T23:53:18.684Z"
+      "updatedAt": "2026-08-03T15:57:00.008Z"
     },
     "setup-matt-pocock-skills": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/mattpocock/skills.git",
       "skillPath": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
-      "skillFolderHash": "77638955bebe492948244f1338e54ca1a9445c29",
-      "pluginName": "mattpocock-skills",
+      "skillFolderHash": "634cf9b010bca5701642aca736dce899822f08f7",
       "installedAt": "2026-05-21T22:31:19.103Z",
-      "updatedAt": "2026-05-21T22:31:19.103Z"
+      "updatedAt": "2026-08-03T15:57:01.845Z"
     },
     "grill-with-docs": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/mattpocock/skills.git",
       "skillPath": "skills/engineering/grill-with-docs/SKILL.md",
-      "skillFolderHash": "2c3a4e48571bfe42203ed7b49cae85f31ef4b6f2",
+      "skillFolderHash": "5fdcdeedf2d0c73b3ecb1da0a464dd885590f8d6",
       "installedAt": "2026-05-21T22:31:19.105Z",
-      "updatedAt": "2026-06-09T02:22:54.776Z"
+      "updatedAt": "2026-08-03T15:57:03.718Z"
     },
     "tdd": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/mattpocock/skills.git",
       "skillPath": "skills/engineering/tdd/SKILL.md",
-      "skillFolderHash": "75beb3030b4c979205dd771ff85ac600baeb68f4",
-      "pluginName": "mattpocock-skills",
+      "skillFolderHash": "0a727bd358b855cbcc1c35cfff21ef31f9ffb8de",
       "installedAt": "2026-05-21T22:31:19.106Z",
-      "updatedAt": "2026-05-21T22:31:19.106Z"
+      "updatedAt": "2026-08-03T15:57:05.029Z"
     },
     "to-issues": {
       "source": "mattpocock/skills",
@@ -146,40 +144,36 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/mattpocock/skills.git",
       "skillPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
-      "skillFolderHash": "688c17ec27fe9309d84987716aca37b5ce7f3a88",
-      "pluginName": "mattpocock-skills",
+      "skillFolderHash": "bce229692e60dff3462e49bc5e774e83bef348e6",
       "installedAt": "2026-05-21T22:31:19.111Z",
-      "updatedAt": "2026-05-21T22:31:19.111Z"
+      "updatedAt": "2026-08-03T15:57:06.182Z"
     },
     "prototype": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/mattpocock/skills.git",
       "skillPath": "skills/engineering/prototype/SKILL.md",
-      "skillFolderHash": "c91bdc5d02d42ed88a3082a8fa83338895b55bd4",
-      "pluginName": "mattpocock-skills",
+      "skillFolderHash": "dd3d782b69ccb67493fbe76b84149399da3c9fee",
       "installedAt": "2026-05-21T22:31:19.111Z",
-      "updatedAt": "2026-05-21T22:31:19.111Z"
+      "updatedAt": "2026-08-03T15:57:07.514Z"
     },
     "handoff": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/mattpocock/skills.git",
       "skillPath": "skills/productivity/handoff/SKILL.md",
-      "skillFolderHash": "7bbb60d64c911617cee7f71b2ba9e24364faa14e",
-      "pluginName": "mattpocock-skills",
+      "skillFolderHash": "184d485ae68a2132893a94239b2b85d253e6152b",
       "installedAt": "2026-05-21T22:31:19.111Z",
-      "updatedAt": "2026-05-21T22:31:19.111Z"
+      "updatedAt": "2026-08-03T15:57:08.716Z"
     },
     "grill-me": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/mattpocock/skills.git",
       "skillPath": "skills/productivity/grill-me/SKILL.md",
-      "skillFolderHash": "2a1ad17028306ebe45f0e49703fa28b9b2e7f499",
-      "pluginName": "mattpocock-skills",
+      "skillFolderHash": "c817f6f36acd483294144694a935a76d3e3eb101",
       "installedAt": "2026-05-21T22:31:19.111Z",
-      "updatedAt": "2026-05-21T22:31:19.111Z"
+      "updatedAt": "2026-08-03T15:57:09.916Z"
     },
     "caveman": {
       "source": "mattpocock/skills",
@@ -196,10 +190,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/mattpocock/skills.git",
       "skillPath": "skills/engineering/triage/SKILL.md",
-      "skillFolderHash": "de4f182c30876a2460ca307e2f601b9b892527e5",
-      "pluginName": "mattpocock-skills",
+      "skillFolderHash": "258364be8354f726bf4080077cd92d86d08c69eb",
       "installedAt": "2026-05-21T22:31:19.112Z",
-      "updatedAt": "2026-05-21T22:31:19.112Z"
+      "updatedAt": "2026-08-03T15:57:11.353Z"
     },
     "synthesize-research": {
       "source": "anthropics/knowledge-work-plugins",
