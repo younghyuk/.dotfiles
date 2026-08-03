@@ -18,6 +18,7 @@ cd ~/.dotfiles
 - Codex portable config를 라이브 파일에 병합하고 머신 상태 보존
 - Codex 공식 plugin 설치 상태 동기화
 - `stow --restow codex zsh agents claude`
+- `~/.agents/skills`를 정본으로 Claude user skill 심링크 동기화
 - 가능한 범위에서 누락된 런타임 도구 설치
 - Claude user MCP 동기화
 - Google CLI + 기본/GA/BQ ADC 상태 검사(누락 시 브라우저 bootstrap 선택)
@@ -91,6 +92,10 @@ stow codex zsh agents claude
 ```
 
 `sync.sh`는 위 패키지를 `--restow`로 적용한다.
+
+사용자 스킬의 정본은 `~/.agents/skills`다. `sync.sh`는 각 스킬을 `~/.claude/skills`에 상대경로
+심링크로 노출한다. 이미 존재하는 Claude 전용 파일이나 다른 대상을 가리키는 심링크는 덮어쓰지 않고, 이전
+동기화가 만든 끊어진 심링크만 정리한다.
 
 ## 스크립트 검증
 

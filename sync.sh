@@ -165,6 +165,65 @@ sync_stow() {
   fi
 }
 
+sync_claude_skills() {
+  section 'Claude skills'
+
+  local source_dir="$HOME/.agents/skills"
+  local live_dir="$HOME/.claude/skills"
+
+  if [[ ! -d "$source_dir" ]]; then
+    fail "user skill source missing: $source_dir"
+    return
+  fi
+
+  mkdir -p "$live_dir"
+
+  local skill_link
+  while IFS= read -r skill_link; do
+    local link_target
+    link_target="$(readlink "$skill_link")"
+    if [[ "$link_target" == ../../.agents/skills/* && ! -e "$skill_link" ]]; then
+      rm "$skill_link"
+    fi
+  done < <(find "$live_dir" -mindepth 1 -maxdepth 1 -type l -print)
+
+  local linked_count=0
+  local skill_dir
+  for skill_dir in "$source_dir"/*; do
+    [[ -d "$skill_dir" && -f "$skill_dir/SKILL.md" ]] || continue
+
+    local skill_name="${skill_dir##*/}"
+    local expected_target="../../.agents/skills/$skill_name"
+    skill_link="$live_dir/$skill_name"
+
+    if [[ -L "$skill_link" ]]; then
+      local actual_target
+      actual_target="$(readlink "$skill_link")"
+      if [[ "$actual_target" == "$expected_target" ]]; then
+        linked_count=$((linked_count + 1))
+        continue
+      fi
+      if [[ "$actual_target" == ../../.agents/skills/* ]]; then
+        ln -sfn "$expected_target" "$skill_link"
+        linked_count=$((linked_count + 1))
+        continue
+      fi
+      warn "Claude skill path already points elsewhere: $skill_link"
+      continue
+    fi
+
+    if [[ -e "$skill_link" ]]; then
+      warn "Claude skill path already exists: $skill_link"
+      continue
+    fi
+
+    ln -s "$expected_target" "$skill_link"
+    linked_count=$((linked_count + 1))
+  done
+
+  pass "Claude user skills synchronized: $linked_count"
+}
+
 # ~/.claude/settings.json is NOT stow-symlinked: Orca (the multi-agent cockpit)
 # injects runtime `hooks` into it at launch, which would pollute the repo or
 # break a symlink. Instead the repo holds the canonical base; here we merge the
@@ -436,6 +495,7 @@ sync_homebrew
 sync_codex_config
 sync_codex_plugins
 sync_stow
+sync_claude_skills
 sync_claude_settings
 sync_claude
 sync_google_adc
