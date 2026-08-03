@@ -389,7 +389,6 @@ run_smoke_checks() {
   fi
   check_symlink "$HOME/.codex/config.template.toml" "../.dotfiles/codex/.codex/config.template.toml"
   check_symlink "$HOME/.codex/hooks.json" "../.dotfiles/codex/.codex/hooks.json"
-  check_symlink "$HOME/.codex/agents" "../.dotfiles/codex/.codex/agents"
   check_symlink "$HOME/.agents" ".dotfiles/agents/.agents"
   check_symlink "$HOME/.zshrc" ".dotfiles/zsh/.zshrc"
   check_symlink "$HOME/.zprofile" ".dotfiles/zsh/.zprofile"
