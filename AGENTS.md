@@ -11,3 +11,7 @@ This repository uses Matt Pocock's five canonical triage roles. See `docs/agents
 ### Domain docs
 
 This is a single-context repository. Domain vocabulary lives in `CONTEXT.md` and architectural decisions live in `docs/adr/`. See `docs/agents/domain.md`.
+
+## Git workflow
+
+This is a personal dotfiles repository. After the relevant checks pass, changes may be committed and pushed directly to `main`; a pull request is optional unless the user asks for review or the change warrants an explicit review boundary.
