@@ -155,13 +155,37 @@ sync_stow() {
 
   if ! has_command stow; then
     fail 'stow missing: brew install stow'
+    return 1
+  fi
+
+  local sync_script="$DOTFILES_DIR/scripts/stow-sync.sh"
+  if [[ ! -f "$sync_script" ]]; then
+    fail "stow sync script missing: $sync_script"
+    return 1
+  fi
+
+  if bash "$sync_script" "$DOTFILES_DIR" "$HOME"; then
+    pass 'stow packages restowed: codex zsh agents claude gcloud'
+    return 0
+  else
+    fail 'stow --restow failed'
+    return 1
+  fi
+}
+
+sync_agent_instructions() {
+  section 'Agent instructions'
+
+  local sync_script="$DOTFILES_DIR/scripts/agent-instructions-sync.sh"
+  if [[ ! -f "$sync_script" ]]; then
+    fail "agent instruction sync script missing: $sync_script"
     return
   fi
 
-  if (cd "$DOTFILES_DIR" && stow --restow codex zsh agents claude gcloud); then
-    pass 'stow packages restowed: codex zsh agents claude gcloud'
+  if bash "$sync_script" "$HOME" "$DOTFILES_DIR/agents/.agents/AGENTS.md"; then
+    pass 'Codex and Claude share the global agent instructions'
   else
-    fail 'stow --restow failed'
+    fail 'agent instruction synchronization failed'
   fi
 }
 
@@ -402,6 +426,70 @@ check_symlink() {
   fi
 }
 
+check_symlink_resolves_to() {
+  local link_path="$1"
+  local expected_path="$2"
+
+  if [[ ! -L "$link_path" ]]; then
+    fail "$link_path is not a symlink"
+    return
+  fi
+  if [[ ! -e "$link_path" ]]; then
+    fail "$link_path is a dangling symlink"
+    return
+  fi
+  if [[ ! -e "$expected_path" ]]; then
+    fail "expected symlink target missing: $expected_path"
+    return
+  fi
+
+  local resolved_link_path
+  local resolved_expected_path
+  resolved_link_path="$(realpath "$link_path")"
+  resolved_expected_path="$(realpath "$expected_path")"
+  if [[ "$resolved_link_path" == "$resolved_expected_path" ]]; then
+    pass "$link_path resolves to $resolved_link_path"
+  else
+    fail "$link_path resolves to $resolved_link_path, expected $resolved_expected_path"
+  fi
+}
+
+check_path_resolves_to() {
+  local path="$1"
+  local expected_path="$2"
+
+  if [[ ! -e "$path" ]]; then
+    fail "$path is missing"
+    return
+  fi
+  if [[ ! -e "$expected_path" ]]; then
+    fail "expected path missing: $expected_path"
+    return
+  fi
+
+  local resolved_path
+  local resolved_expected_path
+  resolved_path="$(realpath "$path")"
+  resolved_expected_path="$(realpath "$expected_path")"
+  if [[ "$resolved_path" == "$resolved_expected_path" ]]; then
+    pass "$path resolves to $resolved_path"
+  else
+    fail "$path resolves to $resolved_path, expected $resolved_expected_path"
+  fi
+}
+
+check_local_directory() {
+  local directory_path="$1"
+
+  if [[ -L "$directory_path" ]]; then
+    fail "$directory_path should be a machine-local directory, not a symlink"
+  elif [[ -d "$directory_path" ]]; then
+    pass "$directory_path is a machine-local directory"
+  else
+    fail "$directory_path is missing"
+  fi
+}
+
 check_secret_name() {
   local file_path="$1"
   local name="$2"
@@ -430,6 +518,11 @@ run_smoke_checks() {
   check_command uvx 'brew install uv'
   check_command toolbox 'brew install mcp-toolbox'
   check_command gcloud 'brew install --cask gcloud-cli'
+  check_command realpath 'Use a current macOS release or install coreutils.'
+
+  check_local_directory "$HOME/.codex"
+  check_local_directory "$HOME/.claude"
+  check_local_directory "$HOME/.local"
 
   if [[ -f "$HOME/.codex/config.toml" && ! -L "$HOME/.codex/config.toml" ]]; then
     pass "$HOME/.codex/config.toml is a machine-local file"
@@ -446,11 +539,25 @@ run_smoke_checks() {
   else
     fail "$HOME/.claude/settings.json should be a regular file, not a symlink (rerun sync.sh)"
   fi
-  check_symlink "$HOME/.codex/config.template.toml" "../.dotfiles/codex/.codex/config.template.toml"
-  check_symlink "$HOME/.codex/hooks.json" "../.dotfiles/codex/.codex/hooks.json"
-  check_symlink "$HOME/.agents" ".dotfiles/agents/.agents"
-  check_symlink "$HOME/.zshrc" ".dotfiles/zsh/.zshrc"
-  check_symlink "$HOME/.zprofile" ".dotfiles/zsh/.zprofile"
+  check_symlink "$HOME/.codex/AGENTS.md" "../.agents/AGENTS.md"
+  check_symlink "$HOME/.claude/CLAUDE.md" "../.agents/AGENTS.md"
+  check_symlink_resolves_to \
+    "$HOME/.codex/AGENTS.md" \
+    "$DOTFILES_DIR/agents/.agents/AGENTS.md"
+  check_symlink_resolves_to \
+    "$HOME/.claude/CLAUDE.md" \
+    "$DOTFILES_DIR/agents/.agents/AGENTS.md"
+  check_symlink_resolves_to \
+    "$HOME/.codex/config.template.toml" \
+    "$DOTFILES_DIR/codex/.codex/config.template.toml"
+  check_symlink_resolves_to \
+    "$HOME/.codex/hooks.json" \
+    "$DOTFILES_DIR/codex/.codex/hooks.json"
+  check_path_resolves_to \
+    "$HOME/.agents/AGENTS.md" \
+    "$DOTFILES_DIR/agents/.agents/AGENTS.md"
+  check_symlink_resolves_to "$HOME/.zshrc" "$DOTFILES_DIR/zsh/.zshrc"
+  check_symlink_resolves_to "$HOME/.zprofile" "$DOTFILES_DIR/zsh/.zprofile"
 
   if python3 -c 'import tomllib' >/dev/null 2>&1; then
     pass 'python3 tomllib available'
@@ -473,8 +580,12 @@ run_smoke_checks() {
   if has_command shellcheck; then
     if shellcheck \
       "$DOTFILES_DIR/sync.sh" \
+      "$DOTFILES_DIR/scripts/agent-instructions-sync.sh" \
       "$DOTFILES_DIR/scripts/claude-mcp-sync.sh" \
       "$DOTFILES_DIR/scripts/codex-config-diff.sh" \
+      "$DOTFILES_DIR/scripts/stow-sync.sh" \
+      "$DOTFILES_DIR/scripts/test-agent-instructions-sync.sh" \
+      "$DOTFILES_DIR/scripts/test-stow-sync.sh" \
       "$DOTFILES_DIR/gcloud/bootstrap.sh" \
       "$DOTFILES_DIR/gcloud/.local/bin/ga-report"; then
       pass 'shellcheck passed'
@@ -494,8 +605,13 @@ sync_git
 sync_homebrew
 sync_codex_config
 sync_codex_plugins
-sync_stow
-sync_claude_skills
+if sync_stow; then
+  sync_agent_instructions
+  sync_claude_skills
+else
+  section 'Agent instructions and skills'
+  warn 'skipped because Stow did not establish the dotfiles agent source'
+fi
 sync_claude_settings
 sync_claude
 sync_google_adc

@@ -17,7 +17,8 @@ cd ~/.dotfiles
 - `Brewfile` 기준 Homebrew formula/cask/tap 동기화
 - Codex portable config를 라이브 파일에 병합하고 머신 상태 보존
 - Codex 공식 plugin 설치 상태 동기화
-- `stow --restow codex zsh agents claude`
+- 명시적인 `$HOME` target으로 `codex`, `zsh`, `agents`, `claude`, `gcloud` Stow 패키지 동기화
+- `~/.codex/AGENTS.md`와 `~/.claude/CLAUDE.md`를 공통 `~/.agents/AGENTS.md`에 연결
 - `~/.agents/skills`를 정본으로 Claude user skill 심링크 동기화
 - 가능한 범위에서 누락된 런타임 도구 설치
 - Claude user MCP 동기화
@@ -88,14 +89,47 @@ adc-bq-reader.json                    -> Ethan -> bq-reader
 주요 패키지:
 
 ```bash
-stow codex zsh agents claude
+stow --dir="$PWD" --target="$HOME" --restow agents
+stow --dir="$PWD" --target="$HOME" --restow --no-folding codex claude gcloud zsh
 ```
 
-`sync.sh`는 위 패키지를 `--restow`로 적용한다.
+`sync.sh`는 위 패키지를 같은 방식으로 적용한다. `agents`는 `~/.agents` 전체 링크를 허용하고,
+런타임 상태가 함께 사는 `~/.codex`, `~/.claude`, `~/.local`은 `--no-folding`으로 실제 로컬
+디렉터리를 유지한다. `--target="$HOME"`을 명시하므로 저장소를 홈 바로 아래가 아닌 곳에 clone해도
+배포 위치는 동일하다.
 
 사용자 스킬의 정본은 `~/.agents/skills`다. `sync.sh`는 각 스킬을 `~/.claude/skills`에 상대경로
 심링크로 노출한다. 이미 존재하는 Claude 전용 파일이나 다른 대상을 가리키는 심링크는 덮어쓰지 않고, 이전
 동기화가 만든 끊어진 심링크만 정리한다.
+
+Skills CLI가 기록한 source와 folder hash는 `agents/.agents/.skill-lock.json`으로 함께 동기화한다.
+upstream 업데이트를 확인·적용한 뒤 Claude 링크를 다시 정렬하려면 다음을 실행한다.
+
+```bash
+npx skills update --global --yes
+./sync.sh
+```
+
+## Agent instructions
+
+개인 전역 지침의 정본은 `agents/.agents/AGENTS.md`이며 Stow가 `~/.agents`로 노출한다.
+`sync.sh`는 Git이 추적하는 심링크를 만들지 않고 각 머신에서 다음 상대 링크를 직접 관리한다.
+
+```text
+~/.codex/AGENTS.md  -> ../.agents/AGENTS.md
+~/.claude/CLAUDE.md -> ../.agents/AGENTS.md
+```
+
+기존 일반 파일을 처음 마이그레이션할 때는 내용을 다음 파일에 보존한 뒤 링크를 만든다.
+
+```text
+~/.codex/AGENTS.md.before-dotfiles-sync.bak
+~/.claude/CLAUDE.md.before-dotfiles-sync.bak
+```
+
+이미 다른 곳을 가리키는 링크나 같은 이름의 백업이 있으면 자동으로 덮어쓰지 않고 실패한다.
+저장소 루트의 `AGENTS.md`는 이 dotfiles 저장소에만 적용되는 규칙이고, 루트 `CLAUDE.md`는
+`@AGENTS.md`로 그 규칙을 가져온다.
 
 ## 스크립트 검증
 
@@ -103,10 +137,16 @@ stow codex zsh agents claude
 
 ```bash
 bash -n sync.sh scripts/claude-mcp-sync.sh scripts/codex-config-diff.sh \
+  scripts/agent-instructions-sync.sh scripts/stow-sync.sh \
+  scripts/test-agent-instructions-sync.sh scripts/test-stow-sync.sh \
   gcloud/bootstrap.sh gcloud/.local/bin/ga-report
 zsh -n zsh/.zprofile zsh/.zshrc
 shellcheck sync.sh scripts/claude-mcp-sync.sh scripts/codex-config-diff.sh \
+  scripts/agent-instructions-sync.sh scripts/stow-sync.sh \
+  scripts/test-agent-instructions-sync.sh scripts/test-stow-sync.sh \
   gcloud/bootstrap.sh gcloud/.local/bin/ga-report
+bash scripts/test-stow-sync.sh
+bash scripts/test-agent-instructions-sync.sh
 scripts/codex-config-diff.sh
 gcloud/bootstrap.sh --check
 ./sync.sh
