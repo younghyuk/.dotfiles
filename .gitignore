@@ -1,5 +1,6 @@
 ssh/.ssh/*
 !ssh/.ssh/config
+!ssh/.ssh/*.pub
 .playwright-mcp/
 __pycache__/
 *.pyc
