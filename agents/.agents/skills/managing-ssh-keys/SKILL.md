@@ -26,6 +26,14 @@ description: "Use when SSH 키를 발급·등록·조회하거나, 서버 SSH �
 3. **사용자에게 로컬 연동 여부를 질문**한다. 원하면 아래 "호스트 연동 레시피" 수행.
 4. AWS EC2용 새 키페어라면: **1P에서 생성하고 공개키만 AWS에 등록**한다 — `aws ec2 import-key-pair --key-name <이름> --public-key-material fileb://<이름>.pub`. 개인키가 AWS를 경유하지 않아 정본=1P가 유지된다(콘솔에서 .pem 다운로드 방식은 쓰지 않는다).
 
+## 팀 키의 S3 배포 채널
+
+팀 공유 키(Maycoders 볼트)는 `s3://maycoders/keys/maycoders/<이름>.pem`에도 배포한다 — 사내 도구가 파일로 소비하는 채널이다(예: preview CLI가 `keys/maycoders/inc.pem`을 읽어 `~/.ssh/preview_key`로 설치). **정본은 여전히 1P고 S3는 배포본이다** — S3에만 있고 1P에 없는 키를 발견하면 1P로 승격 등록한다.
+
+- 업로드는 디스크를 거치지 않는 스트림으로: `op read "op://Maycoders/SSH Key - <이름>/private key" | aws s3 cp - s3://maycoders/keys/maycoders/<이름>.pem`
+- 업로드 후 지문 대조로 검증: `aws s3 cp <경로> - | ssh-keygen -lf /dev/stdin` ↔ 1P/에이전트 지문
+- 개인키가 올라가는 버킷이므로 퍼블릭 액세스 차단 4항목이 켜져 있어야 한다(`aws s3api get-public-access-block --bucket maycoders`)
+
 ## 호스트 연동 레시피 (config + dotfiles + sshs)
 
 1. 작업 전 `ls -ld ~/.ssh` — 실디렉터리여야 정상. 심링크(폴딩)라면 dotfiles 쪽 파일이 곧 라이브다: 사본으로 취급해 지우면 안 되고, `stow --restow --no-folding ssh`로 먼저 언폴딩.
