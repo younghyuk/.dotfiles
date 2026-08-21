@@ -165,7 +165,7 @@ sync_stow() {
   fi
 
   if bash "$sync_script" "$DOTFILES_DIR" "$HOME"; then
-    pass 'stow packages restowed: codex zsh agents claude gcloud'
+    pass 'stow packages restowed: codex zsh agents claude gcloud 1password'
     return 0
   else
     fail 'stow --restow failed'

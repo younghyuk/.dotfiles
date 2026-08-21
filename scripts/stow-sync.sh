@@ -24,4 +24,4 @@ if [[ ! -d "$TARGET_HOME" ]]; then
 fi
 
 stow --dir="$STOW_DIR" --target="$TARGET_HOME" --restow agents
-stow --dir="$STOW_DIR" --target="$TARGET_HOME" --restow --no-folding codex claude gcloud zsh
+stow --dir="$STOW_DIR" --target="$TARGET_HOME" --restow --no-folding codex claude gcloud zsh 1password
