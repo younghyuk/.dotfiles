@@ -66,6 +66,11 @@ assert_realpath_equals \
   "$TARGET_HOME/.local/bin/ga-report" \
   "$DOTFILES_DIR/gcloud/.local/bin/ga-report"
 
+[[ -d "$TARGET_HOME/.config/ghostty" && ! -L "$TARGET_HOME/.config/ghostty" ]]
+assert_realpath_equals \
+  "$TARGET_HOME/.config/ghostty/config" \
+  "$DOTFILES_DIR/ghostty/.config/ghostty/config"
+
 STATUS_AFTER="$(git -C "$DOTFILES_DIR" status --short --untracked-files=all)"
 if [[ "$STATUS_AFTER" != "$STATUS_BEFORE" ]]; then
   printf 'FAIL stow sync changed the dotfiles worktree\n' >&2

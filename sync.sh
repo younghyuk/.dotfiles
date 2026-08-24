@@ -165,7 +165,7 @@ sync_stow() {
   fi
 
   if bash "$sync_script" "$DOTFILES_DIR" "$HOME"; then
-    pass 'stow packages restowed: codex zsh agents claude gcloud 1password ssh'
+    pass 'stow packages restowed: codex zsh agents claude gcloud 1password ssh ghostty'
     return 0
   else
     fail 'stow --restow failed'
@@ -490,6 +490,58 @@ check_local_directory() {
   fi
 }
 
+find_ghostty_binary() {
+  local bundled='/Applications/Ghostty.app/Contents/MacOS/ghostty'
+
+  if [[ -x "$bundled" ]]; then
+    printf '%s' "$bundled"
+  elif has_command ghostty; then
+    command -v ghostty
+  fi
+}
+
+check_ghostty_config() {
+  local config="$HOME/.config/ghostty/config"
+
+  if [[ ! -e "$config" ]]; then
+    fail "$config is missing (rerun sync.sh)"
+    return
+  fi
+
+  local ghostty_binary
+  ghostty_binary="$(find_ghostty_binary)"
+  if [[ -z "$ghostty_binary" ]]; then
+    warn 'ghostty missing; skipped ghostty config checks'
+    return
+  fi
+
+  if "$ghostty_binary" +validate-config --config-file="$config" >/dev/null 2>&1; then
+    pass 'ghostty config syntax valid'
+  else
+    fail "ghostty config invalid: $ghostty_binary +validate-config --config-file=$config"
+  fi
+
+  # The Brewfile only proves a font cask is installed, not that it still ships
+  # the face the config names: font-meslo-lg-nerd-font 3.4.0 had no MesloLGS,
+  # so brew bundle check passed while Ghostty silently fell back for every glyph.
+  local installed_families
+  installed_families="$("$ghostty_binary" +list-fonts 2>/dev/null | grep -v '^[[:space:]]')"
+
+  local family
+  while IFS= read -r family; do
+    [[ -n "$family" ]] || continue
+
+    if printf '%s\n' "$installed_families" | grep -qxF "$family"; then
+      pass "ghostty font installed: $family"
+    else
+      fail "ghostty font missing: $family (add its cask to Brewfile, then rerun sync.sh)"
+    fi
+  done < <(
+    grep -E '^font-family[a-z-]*[[:space:]]*=' "$config" |
+      sed -e 's/^[^=]*=[[:space:]]*//' -e 's/^"//' -e 's/"$//'
+  )
+}
+
 check_secret_name() {
   local file_path="$1"
   local name="$2"
@@ -570,6 +622,8 @@ run_smoke_checks() {
   else
     fail 'zsh config syntax failed'
   fi
+
+  check_ghostty_config
 
   if bash "$DOTFILES_DIR/scripts/codex-config-diff.sh" >/dev/null 2>&1; then
     pass 'codex config matches template'
