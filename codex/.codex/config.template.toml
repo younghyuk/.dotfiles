@@ -9,11 +9,17 @@
 # Intentional change:   update this template, then rerun ./sync.sh
 
 model = "gpt-5.6-sol"
-model_reasoning_effort = "max"
+model_reasoning_effort = "high"
 model_verbosity = "high"
 approval_policy = "never"
 sandbox_mode = "workspace-write"
 web_search = "live"
+service_tier = "priority"
+
+[agents]
+max_concurrent_threads_per_session = 6
+default_subagent_model = "gpt-5.6-terra"
+default_subagent_reasoning_effort = "medium"
 
 [sandbox_workspace_write]
 network_access = true
@@ -60,6 +66,21 @@ enabled = true
 enabled = true
 
 [plugins."computer-use@openai-bundled"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
 enabled = true
 
 # Personal/user MCPs. Company/repo MCPs belong in each repo's .codex/config.toml.

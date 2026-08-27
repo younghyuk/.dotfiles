@@ -16,6 +16,7 @@ cd ~/.dotfiles
 - worktree가 깨끗하면 `git pull --ff-only`
 - `Brewfile` 기준 Homebrew formula/cask/tap 동기화
 - Codex portable config를 라이브 파일에 병합하고 머신 상태 보존
+- Codex 사용자 역할을 `~/.codex/agents`의 일반 파일로 동기화
 - Codex 공식 plugin 설치 상태 동기화
 - 명시적인 `$HOME` target으로 `codex`, `zsh`, `agents`, `claude`, `gcloud` Stow 패키지 동기화
 - `~/.codex/AGENTS.md`와 `~/.claude/CLAUDE.md`를 공통 `~/.agents/AGENTS.md`에 연결
@@ -65,11 +66,24 @@ brew bundle dump --file=Brewfile --force --no-vscode --no-go --no-npm --no-descr
 - 구 레이아웃에서 `~/.codex/config.toml`이 repo 심링크인 경우에도 `sync.sh`가 내용을
   보존한 머신 로컬 파일로 분리한 뒤 새 템플릿을 병합한다.
 
+### Codex agent roles
+
+사용자 역할의 정본은 `codex/.codex/agents/*.toml`이다. `sync.sh`는 이를
+`~/.codex/agents`에 권한 `600`인 일반 파일로 복사한다. Codex가 사용자 역할 디렉터리의
+심링크를 역할 정의로 안정적으로 읽지 않으므로 Stow에서는 이 경로를 제외한다.
+
+- 정본과 이름이 같은 기존 파일이나 심링크는 정본 내용으로 교체한다.
+- 다른 이름의 머신 전용 역할은 보존한다.
+- 같은 이름의 디렉터리 등 일반 파일이 아닌 경로와 충돌하면 덮어쓰지 않고 실패한다.
+- 역할 모델과 추론 강도는 각 역할 TOML에, 기본 하위 에이전트와 동시 실행 제한은
+  `config.template.toml`의 `[agents]`에 둔다.
+
 ## MCP / 인증 동기화 경계
 
 | 대상 | dotfiles가 동기화 | 각 PC에서 다시 해야 함 |
 | --- | --- | --- |
 | Codex user config | model/sandbox/web/plugin enable/user MCP | Codex 로그인, connector OAuth, project trust |
+| Codex agent roles | 역할별 model/reasoning/instructions와 기본 동시 실행 설정 | 없음 (`./sync.sh` 재실행) |
 | Codex plugins | 공식 plugin 설치 명령과 enable 상태 | 계정/관리자 정책에 따른 connector 연결 |
 | Claude user MCP | GitHub, Context7, Playwright, PostHog 등록 | HTTP OAuth/토큰 환경변수 |
 | Repo MCP | 각 repo의 `.codex/config.toml`, `.mcp.json`을 Git이 동기화 | Claude project MCP 최초 승인 |
@@ -97,6 +111,9 @@ stow --dir="$PWD" --target="$HOME" --restow --no-folding codex claude gcloud zsh
 런타임 상태가 함께 사는 `~/.codex`, `~/.claude`, `~/.local`은 `--no-folding`으로 실제 로컬
 디렉터리를 유지한다. `--target="$HOME"`을 명시하므로 저장소를 홈 바로 아래가 아닌 곳에 clone해도
 배포 위치는 동일하다.
+
+`codex/.stow-local-ignore`는 `.codex/agents`를 Stow 대상에서 제외한다. 이 디렉터리는
+`scripts/codex-agent-sync.sh`가 각 머신의 일반 파일로 별도 관리한다.
 
 사용자 스킬의 정본은 `~/.agents/skills`다. `sync.sh`는 각 스킬을 `~/.claude/skills`에 상대경로
 심링크로 노출한다. 이미 존재하는 Claude 전용 파일이나 다른 대상을 가리키는 심링크는 덮어쓰지 않고, 이전
@@ -136,15 +153,18 @@ npx skills update --global --yes
 쉘 스크립트는 별도 테스트 프레임워크 대신 문법 검사, shellcheck, 실제 smoke run으로 검증한다:
 
 ```bash
-bash -n sync.sh scripts/claude-mcp-sync.sh scripts/codex-config-diff.sh \
-  scripts/agent-instructions-sync.sh scripts/stow-sync.sh \
-  scripts/test-agent-instructions-sync.sh scripts/test-stow-sync.sh \
+bash -n sync.sh scripts/claude-mcp-sync.sh scripts/codex-agent-sync.sh \
+  scripts/codex-config-diff.sh scripts/agent-instructions-sync.sh scripts/stow-sync.sh \
+  scripts/test-agent-instructions-sync.sh scripts/test-codex-agent-sync.sh \
+  scripts/test-stow-sync.sh \
   gcloud/bootstrap.sh gcloud/.local/bin/ga-report
 zsh -n zsh/.zprofile zsh/.zshrc
-shellcheck sync.sh scripts/claude-mcp-sync.sh scripts/codex-config-diff.sh \
-  scripts/agent-instructions-sync.sh scripts/stow-sync.sh \
-  scripts/test-agent-instructions-sync.sh scripts/test-stow-sync.sh \
+shellcheck sync.sh scripts/claude-mcp-sync.sh scripts/codex-agent-sync.sh \
+  scripts/codex-config-diff.sh scripts/agent-instructions-sync.sh scripts/stow-sync.sh \
+  scripts/test-agent-instructions-sync.sh scripts/test-codex-agent-sync.sh \
+  scripts/test-stow-sync.sh \
   gcloud/bootstrap.sh gcloud/.local/bin/ga-report
+bash scripts/test-codex-agent-sync.sh
 bash scripts/test-stow-sync.sh
 bash scripts/test-agent-instructions-sync.sh
 scripts/codex-config-diff.sh

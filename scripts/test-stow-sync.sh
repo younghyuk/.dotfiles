@@ -56,6 +56,7 @@ for local_directory in "$TARGET_HOME/.codex" "$TARGET_HOME/.claude" "$TARGET_HOM
 done
 
 [[ ! -e "$TARGET_HOME/.claude/settings.json" ]]
+[[ ! -e "$TARGET_HOME/.codex/agents/code_explorer.toml" ]]
 assert_realpath_equals \
   "$TARGET_HOME/.codex/config.template.toml" \
   "$DOTFILES_DIR/codex/.codex/config.template.toml"

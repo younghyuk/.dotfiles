@@ -93,6 +93,25 @@ sync_codex_config() {
   fi
 }
 
+sync_codex_agents() {
+  section 'Codex agents'
+
+  local source_dir="$DOTFILES_DIR/codex/.codex/agents"
+  local target_dir="$HOME/.codex/agents"
+  local sync_script="$DOTFILES_DIR/scripts/codex-agent-sync.sh"
+
+  if [[ ! -f "$sync_script" ]]; then
+    fail "Codex agent sync script missing: $sync_script"
+    return
+  fi
+
+  if bash "$sync_script" "$source_dir" "$target_dir"; then
+    pass 'portable Codex agent roles synchronized as regular files'
+  else
+    fail 'Codex agent role synchronization failed'
+  fi
+}
+
 sync_codex_plugins() {
   section 'Codex plugins'
 
@@ -582,6 +601,24 @@ run_smoke_checks() {
     fail "$HOME/.codex/config.toml should be a regular file, not a symlink (rerun sync.sh)"
   fi
 
+  local codex_role_source
+  local codex_role_count=0
+  for codex_role_source in "$DOTFILES_DIR/codex/.codex/agents"/*.toml; do
+    [[ -f "$codex_role_source" ]] || continue
+    codex_role_count=$((codex_role_count + 1))
+
+    local codex_role_target="$HOME/.codex/agents/${codex_role_source##*/}"
+    if [[ -f "$codex_role_target" && ! -L "$codex_role_target" ]] &&
+      cmp -s "$codex_role_source" "$codex_role_target"; then
+      pass "$codex_role_target is a synchronized machine-local file"
+    else
+      fail "$codex_role_target should be a synchronized regular file (rerun sync.sh)"
+    fi
+  done
+  if [[ $codex_role_count -eq 0 ]]; then
+    fail 'no portable Codex agent roles found in dotfiles'
+  fi
+
   if [[ -f "$HOME/.claude/settings.json" && ! -L "$HOME/.claude/settings.json" ]]; then
     if ! has_command jq || jq -e . "$HOME/.claude/settings.json" >/dev/null 2>&1; then
       pass "$HOME/.claude/settings.json is a machine-local file"
@@ -636,9 +673,11 @@ run_smoke_checks() {
       "$DOTFILES_DIR/sync.sh" \
       "$DOTFILES_DIR/scripts/agent-instructions-sync.sh" \
       "$DOTFILES_DIR/scripts/claude-mcp-sync.sh" \
+      "$DOTFILES_DIR/scripts/codex-agent-sync.sh" \
       "$DOTFILES_DIR/scripts/codex-config-diff.sh" \
       "$DOTFILES_DIR/scripts/stow-sync.sh" \
       "$DOTFILES_DIR/scripts/test-agent-instructions-sync.sh" \
+      "$DOTFILES_DIR/scripts/test-codex-agent-sync.sh" \
       "$DOTFILES_DIR/scripts/test-stow-sync.sh" \
       "$DOTFILES_DIR/gcloud/bootstrap.sh" \
       "$DOTFILES_DIR/gcloud/.local/bin/ga-report"; then
@@ -658,6 +697,7 @@ printf 'dotfiles: %s\n' "$DOTFILES_DIR"
 sync_git
 sync_homebrew
 sync_codex_config
+sync_codex_agents
 sync_codex_plugins
 if sync_stow; then
   sync_agent_instructions
