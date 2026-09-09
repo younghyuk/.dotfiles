@@ -9,7 +9,12 @@
 #
 # By default, all keys in your Private vault(s) are enabled:
 #
-#  [[ssh-keys]]
+#  # inc 를 먼저 서빙한다 — DBeaver 등 IdentitiesOnly 를 못 쓰는 클라이언트가 서버 MaxAuthTries(6) 안에서 맞는 키를 내밀게.
+[[ssh-keys]]
+item = "SSH Key - inc.pem"
+vault = "Maycoders"
+
+[[ssh-keys]]
 #  vault = "Private"
 #
 # You can enable more keys by adding more `[[ssh-keys]]` entries.
