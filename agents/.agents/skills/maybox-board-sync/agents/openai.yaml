@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maybox 보드 최신화"
+  short_description: "Linear·Slack·GitHub 근거로 Maybox 이슈 상태와 남은 범위를 최신화"
+  default_prompt: "$maybox-board-sync를 사용해 Linear·Slack·GitHub를 확인하고 Maybox 이슈 보드를 최신화해줘."
