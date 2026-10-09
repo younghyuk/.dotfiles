@@ -4,8 +4,8 @@ How the engineering skills should consume this repository's domain documentation
 
 ## Before exploring, read these
 
-- **`CONTEXT.md`** at the repository root, or
-- **`CONTEXT-MAP.md`** at the repository root if it exists. It points at one `CONTEXT.md` per context; read each one relevant to the topic.
+- **`GLOSSARY.md`** at the repository root, or
+- **`GLOSSARY-MAP.md`** at the repository root if it exists. It points at one `GLOSSARY.md` per context; read each one relevant to the topic.
 - **`docs/adr/`**. Read ADRs that touch the area about to change. In multi-context repositories, also check `src/<context>/docs/adr/` for context-scoped decisions.
 
 If any of these files do not exist, proceed silently. Do not flag their absence or suggest creating them upfront. The `/domain-modeling` skill, reached through `/grill-with-docs` and `/improve-codebase-architecture`, creates them lazily when terms or decisions are resolved.
@@ -16,7 +16,7 @@ This is a single-context repository:
 
 ```text
 /
-├── CONTEXT.md
+├── GLOSSARY.md
 ├── docs/adr/
 │   ├── 0001-example-decision.md
 │   └── 0002-another-decision.md
@@ -25,7 +25,7 @@ This is a single-context repository:
 
 ## Use the glossary's vocabulary
 
-When output names a domain concept in an issue title, refactor proposal, hypothesis, or test name, use the term defined in `CONTEXT.md`. Do not drift to synonyms the glossary explicitly avoids.
+When output names a domain concept in an issue title, refactor proposal, hypothesis, or test name, use the term defined in `GLOSSARY.md`. Do not drift to synonyms the glossary explicitly avoids.
 
 If the needed concept is not in the glossary, reconsider whether the language belongs to this repository or note a real gap for `/domain-modeling`.
 

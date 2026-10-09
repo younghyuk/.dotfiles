@@ -10,7 +10,7 @@ This repository uses Matt Pocock's five canonical triage roles. See `docs/agents
 
 ### Domain docs
 
-This is a single-context repository. Domain vocabulary lives in `CONTEXT.md` and architectural decisions live in `docs/adr/`. See `docs/agents/domain.md`.
+This is a single-context repository. Domain vocabulary lives in `GLOSSARY.md` and architectural decisions live in `docs/adr/`. See `docs/agents/domain.md`.
 
 ## Git workflow
 
