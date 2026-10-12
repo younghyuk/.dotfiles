@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maybox 다음 작업 선정"
+  short_description: "긴급도·중요도·완료 준비도와 사람 개입으로 다음 작업 묶음을 추천"
+  default_prompt: "$maybox-next-work를 사용해 Maybox 다음 작업을 우선순위와 새 세션 단위로 묶고, 사람이 개입할 내용과 정도를 간결하게 알려줘."
