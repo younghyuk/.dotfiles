@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maybox 작업 세션 조율"
+  short_description: "선택한 작업을 자율 실행·함께 설계로 위임하고 진행 감시부터 리뷰·머지까지 조율"
+  default_prompt: "$maybox-orchestrate를 사용해 선택한 Maybox 묶음을 새 세션에 맡기고 pin해줘. 필요한 설계는 해당 세션에서 함께 하고, 합의된 작업은 PR·독립 리뷰·머지까지 자율적으로 완료하도록 조율해줘."
