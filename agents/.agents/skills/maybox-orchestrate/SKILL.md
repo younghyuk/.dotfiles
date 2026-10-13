@@ -74,3 +74,5 @@ description: Use when the user asks to delegate selected Maybox work groups to n
 | 이슈·세션 링크 | 설계/실행·실제 단계 | 커밋·PR·검증 근거와 남은 단계 | 정도·무엇·어느 세션에서·언제, 없으면 없음 |
 
 완료 보고에는 결과·주요 결정·실제 PR/머지·검증·남은 범위와 사람 확인을 담는다. 새 pin은 기본이며, 완료된 세션의 unpin·archive·worktree 정리는 사용자 요청 또는 확인된 정리 정책에 따른다.
+
+사용자가 조율자 환경을 유지하며 위임 세션·worktree를 정리하도록 요청하면 [close-delegated-work](../close-delegated-work/SKILL.md)를 적용한다. 미완료 작업과 사용자 확인용 환경은 현재 승인·보존 조건에 따라 남긴다.

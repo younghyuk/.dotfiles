@@ -1,0 +1,4 @@
+interface:
+  display_name: "위임 작업 마감"
+  short_description: "조율자 환경을 유지하면서 완료된 위임 세션과 본인 작업자원을 정리"
+  default_prompt: "$close-delegated-work로 이번 조율 런을 정리해줘. 조율자 환경은 유지하고 완료된 위임 작업의 증거를 보존한 뒤 본인 자원과 worktree를 정리하고 채팅을 아카이브해줘."
