@@ -561,22 +561,6 @@ check_ghostty_config() {
   )
 }
 
-check_secret_name() {
-  local file_path="$1"
-  local name="$2"
-
-  if [[ ! -f "$file_path" ]]; then
-    fail "$file_path missing"
-    return
-  fi
-
-  if grep -Eq "^[[:space:]]*(export[[:space:]]+)?${name}=" "$file_path"; then
-    pass "$name present in $file_path"
-  else
-    warn "$name not found in $file_path"
-  fi
-}
-
 run_smoke_checks() {
   section 'Smoke checks'
 
@@ -689,7 +673,6 @@ run_smoke_checks() {
     warn 'shellcheck missing: brew install shellcheck'
   fi
 
-  check_secret_name "$HOME/.zsh_secrets" GITHUB_MCP_PAT
 }
 
 printf 'dotfiles: %s\n' "$DOTFILES_DIR"

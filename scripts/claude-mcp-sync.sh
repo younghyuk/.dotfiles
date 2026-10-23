@@ -48,8 +48,8 @@ remove_user_mcp_if_present() {
 # repo's .mcp.json. Remove the obsolete user entry that pointed at ga-sa-key.json.
 remove_user_mcp_if_present analytics-mcp
 
-add_mcp_if_missing github -s user --transport http https://api.githubcopilot.com/mcp/ \
-  --header "Authorization: Bearer \${GITHUB_MCP_PAT}"
+# GitHub 작업은 gh CLI(OAuth)로 한다. 쓰이지 않던 PAT 기반 원격 MCP 를 지운다.
+remove_user_mcp_if_present github
 
 add_mcp_if_missing context7 -s user \
   -- npx -y @upstash/context7-mcp
